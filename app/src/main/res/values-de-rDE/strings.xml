@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Talks</string>
+    <string name="real_name">Vorname</string>
+    <string name="real_surname">Nachname</string>
+    <string name="password">Passwort</string>
+    <string name="nickname">Spitzname</string>
+    <string name="email_address">E-mail addresse</string>
+</resources>
