@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">Talks</string>
     <string name="real_name">Nome</string>
     <string name="real_surname">Cognome</string>
-    <string name="password">Parola d'ordine</string>
+    <string name="password">password</string>
     <string name="email_address">Indirizzo e-mail</string>
     <string name="nickname">Soprannome</string>
     <string name="join_now">Iscriviti a parlare ora!</string>
