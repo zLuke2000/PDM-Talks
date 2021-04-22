@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Talks</string>
+    <string name="app_name" translatable="false">Talks</string>
     <string name="real_name">Nom</string>
-    <string name="real_surname">Prenom</string>
+    <string name="real_surname">Nom de famille</string>
     <string name="password">Mot de passe</string>
     <string name="email_address">Adresse e-mail</string>
     <string name="nickname">Surnom</string>
+    <string name="join_now">Rejoignez les discussions maintenant!</string>
+    <string name="login">Connexion</string>
 </resources>
