@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Talks</string>
-    <string name="real_name">Name</string>
+    <string name="real_name">Vorname</string>
     <string name="real_surname">Nachname</string>
     <string name="password">Passwort</string>
     <string name="email_address">E-Mail-Addresse</string>
