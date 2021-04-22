@@ -3,9 +3,9 @@
     <string name="app_name" translatable="false">Talks</string>
     <string name="real_name">Nombre</string>
     <string name="real_surname">Apellido</string>
-    <string name="password">Contraseña</string>
-    <string name="email_address">Dirección de correo electrónico</string>
+    <string name="password">contraseÃ±a</string>
+    <string name="email_address">direcciÃ³n de correo electrÃ³nico</string>
     <string name="nickname">Apodo</string>
-    <string name="join_now">¡Únete a las conversaciones ahora!</string>
+    <string name="join_now">Ãšnete a las conversaciones ahora!</string>
     <string name="login">Acceso</string>
 </resources>
