@@ -3,9 +3,15 @@
     <string name="app_name" translatable="false">Talks</string>
     <string name="real_name">Name</string>
     <string name="real_surname">Surname</string>
-    <string name="password">Password</string>
+    <string name="login_password">Password</string>
+    <string name="password">Password (min 4 characters)</string>
     <string name="email_address">E-mail address</string>
     <string name="nickname">Nickname</string>
-    <string name="join_now">Join Talks now!</string>
+    <string name="join_now">Don\'t have an account? Join Talks now!</string>
     <string name="login">Login</string>
+    <string name="signin">SIGN-IN</string>
+    <string name="immagine_schermata_login" translatable="false">login_image</string>
+    <string name="sign_up">SIGN-UP</string>
+
+    <string name="invalidEmail">Invalid email</string>
 </resources>

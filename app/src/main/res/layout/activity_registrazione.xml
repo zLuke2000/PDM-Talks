@@ -4,76 +4,112 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="24dp"
     tools:context=".Registrazione">
 
     <EditText
-        android:id="@+id/editText_RealName"
-        android:layout_width="wrap_content"
+        android:id="@+id/TF_RealName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/real_name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editText_RealSurname"
+        app:layout_constraintBottom_toTopOf="@+id/TF_RealSurname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/editText_RealSurname"
-        android:layout_width="wrap_content"
+        android:id="@+id/TF_RealSurname"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/real_surname"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editText_EmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/TF_EmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_RealName" />
+        app:layout_constraintTop_toBottomOf="@+id/TF_RealName" />
 
     <EditText
-        android:id="@+id/editText_EmailAddress"
-        android:layout_width="wrap_content"
+        android:id="@+id/TF_EmailAddress"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/editText_Password"
+        app:layout_constraintBottom_toTopOf="@+id/TF_Password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_RealSurname" />
+        app:layout_constraintTop_toBottomOf="@+id/TF_RealSurname" />
 
     <EditText
-        android:id="@+id/editText_Password"
-        android:layout_width="wrap_content"
+        android:id="@+id/TF_Password"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/editText_Nickname"
+        app:layout_constraintBottom_toTopOf="@+id/TF_Nickname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_EmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/TF_EmailAddress" />
 
     <EditText
-        android:id="@+id/editText_Nickname"
-        android:layout_width="wrap_content"
+        android:id="@+id/TF_Nickname"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/nickname"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TF_Password" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="checkRegistration"
+        android:text="@string/signin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Password" />
+        app:layout_constraintTop_toBottomOf="@+id/TF_Nickname" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="@string/sign_up"
+        android:textColor="@color/orange_light"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/TF_RealName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0
+"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

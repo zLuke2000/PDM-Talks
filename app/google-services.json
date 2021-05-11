@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1051797889523",
+    "project_id": "prog-dispositivi-mobili",
+    "storage_bucket": "prog-dispositivi-mobili.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051797889523:android:b757c74e2830fa912e7286",
+        "android_client_info": {
+          "package_name": "it.uninsubria.talks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051797889523-vk28os3c32m955bo2h7uokf5d9n9pdta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBytRgkn33_WlG0MTPCTBS9XWC2U61WOkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1051797889523-vk28os3c32m955bo2h7uokf5d9n9pdta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
