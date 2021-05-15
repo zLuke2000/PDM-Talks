@@ -18,11 +18,11 @@ class Registrazione : AppCompatActivity() {
     }
 
     fun checkRegistration(v: View?){
-        val name: String = TF_RealName.text.toString()
-        val surname: String = TF_RealSurname.text.toString()
-        val email: String = TF_EmailAddress.text.toString()
-        val password: String = TF_Password.text.toString()
-        val nickname: String = TF_Nickname.text.toString()
+        val name: String = TF_RealName.text.toString().trim()
+        val surname: String = TF_RealSurname.text.toString().trim()
+        val email: String = TF_EmailAddress.text.toString().trim()
+        val password: String = TF_Password.text.toString().trim()
+        val nickname: String = TF_Nickname.text.toString().trim()
         var ok: Boolean = true
 
         ok = checkName(TF_RealName, 2, 16)
@@ -33,7 +33,7 @@ class Registrazione : AppCompatActivity() {
 
         if(ok) {
             Log.i(TAG, "Controllo OK")
-            Database(name, surname, email, password, nickname).check()
+            Database().addUserToDB(name, surname, email, password, nickname)
         } else {
             Log.e(TAG, "ERRORE")
         }
