@@ -4,4 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"/>
+    tools:context=".MainActivity">
+
+
+    <ListView
+        android:id= "@+id/main_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF0"
+        tools:layout_editor_absoluteX="-31dp"
+        tools:layout_editor_absoluteY="74dp">
+    </ListView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
