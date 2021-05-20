@@ -16,9 +16,9 @@ class Database constructor(){
         utente["nickname"] = nickname
 
         db.collection("utenti")
-                .add(utente)
-                .addOnSuccessListener { documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id) }
-                .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
+            .add(utente)
+            .addOnSuccessListener { documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id) }
+            .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
     }
 }
 
