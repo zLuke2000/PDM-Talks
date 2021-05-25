@@ -31,17 +31,17 @@ class MainActivity : AppCompatActivity() {
         //Firebase - authentication
         myAuth = Firebase.auth
 
-        val listView = findViewById<ListView> (R.id.main_listview)
-        val color = Color.parseColor( "#FF0000")
+        // val listView = findViewById<ListView> (R.id.main_listview)
+        // val color = Color.parseColor( "#FF0000")
         // listView.setBackgroundColor(color)
-        listView.adapter = MyCustomAdapter(this)
+        // listView.adapter = MyCustomAdapter(this)
     }
 
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null)
         val currentUser = myAuth.currentUser
-        if(currentUser == null) {
+        if(currentUser != null) {
             Log.i(TAG, "[MAIN] Passo alla schermata <Login>")
             startActivity(Intent(this, Login::class.java))
         } else {
