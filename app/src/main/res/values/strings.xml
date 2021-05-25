@@ -4,7 +4,7 @@
     <string name="real_name">Name</string>
     <string name="real_surname">Surname</string>
     <string name="login_password">Password</string>
-    <string name="password">Password (min 4 characters)</string>
+    <string name="password">Password (min 6 characters)</string>
     <string name="email_address">E-mail address</string>
     <string name="nickname">Nickname</string>
     <string name="join_now">Don\'t have an account? Join Talks now!</string>

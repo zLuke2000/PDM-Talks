@@ -1,44 +1,47 @@
 package it.uninsubria.talks
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import it.uninsubria.database.Database
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import it.uninsubria.firebase.firestore.Database
+import it.uninsubria.firebase.authentication.Authentication
 import kotlinx.android.synthetic.main.activity_registrazione.*
-import java.util.regex.Pattern
 
 class Registrazione : AppCompatActivity() {
     private val TAG = "Activity_Registrazione"
+    private lateinit var myAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrazione)
+        //Firebase - authentication
+        myAuth = FirebaseAuth.getInstance()
     }
 
-    fun checkRegistration(v: View?){
+    fun checkRegistrazione(view: View){
         val name: String = TF_RealName.text.toString().trim()
         val surname: String = TF_RealSurname.text.toString().trim()
-        val email: String = TF_EmailAddress.text.toString().trim()
+        val email: String = TF_EmailLogin.text.toString().trim()
         val password: String = TF_Password.text.toString().trim()
         val nickname: String = TF_Nickname.text.toString().trim()
-        var ok: Boolean = true
 
-        ok = checkName(TF_RealName, 2, 16)
-        ok = checkName(TF_RealSurname, 3, 16)
-        ok = checkEmail(email)
-        ok = checkPassword(TF_Password, 4)
-        ok = checkName(TF_Nickname, 4, 30)
-
-        if(ok) {
+        if(checkName(TF_RealName, 2, 16) and checkName(TF_RealSurname, 3, 16) and checkEmail(email) and checkPassword(TF_Password, 6) and checkName(TF_Nickname, 4, 30)) {
             Log.i(TAG, "Controllo OK")
-            Database().addUserToDB(name, surname, email, password, nickname)
+            Database().addUserToDB(name, surname, email, nickname)
+            Authentication().registraUtenteNomePassword(this, baseContext, myAuth, email, password)
         } else {
-            Log.e(TAG, "ERRORE")
+            Log.e(TAG, "ERRORE - Controllo non soddisfatto")
         }
     }
 
+    fun chiudiActivity() {
+        finish()
+    }
     // controllo lunghezza nome, cognome e nickname
     private fun checkName(tf: EditText, min: Int, max: Int): Boolean {
         if(tf.text.length < min) {
@@ -53,13 +56,10 @@ class Registrazione : AppCompatActivity() {
 
     // controllo email
     private fun checkEmail(email: String): Boolean {
-        val EMAIL_PATTERN = ("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)@[A-Za-z0-9-]+(\\.[A-Za-z]{2,})$")
-        val pattern = Pattern.compile(EMAIL_PATTERN)
-        val matcher = pattern.matcher(email)
-        if(matcher.matches()) {
+        if(android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true
         } else {
-            TF_EmailAddress.error = getString(R.string.invalidEmail)
+            TF_EmailLogin.error = getString(R.string.invalidEmail)
             return false
         }
     }
