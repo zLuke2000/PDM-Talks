@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
        // Log.i(TAG, "Passo alla schermata <Login>")
         // startActivity(Intent(this, Login::class.java))
         val listView = findViewById<ListView> (R.id.main_listview)
-        val color = Color.parseColor( "#FF0000")
+       // val color = Color.parseColor( "#FF0000")
        // listView.setBackgroundColor(color)
         listView.adapter = MyCustomAdapter(this)
 
@@ -35,13 +35,13 @@ class MainActivity : AppCompatActivity() {
 private class MyCustomAdapter(context: Context): BaseAdapter() {
     private val mContext: Context
     private val names = arrayListOf<String>(
-        " Luca Centore","Marc Orlando", "johnny","booooh ",
+        " Luca Centore","Marc Orlando", "johnny","booooh ","ciaoooo", " Luca Centore","Marc Orlando", "johnny","booooh ","ciaoooo"," Luca Centore","Marc Orlando", "johnny","booooh ","ciaoooo", " Luca Centore","Marc Orlando", "johnny","booooh ","ciaoooo"
     )
     init{
         mContext = context
     }
     override fun getCount(): Int {
-        return 4
+        return 20
     }
     override fun getItemId(position: Int): Long {
         return position.toLong()
