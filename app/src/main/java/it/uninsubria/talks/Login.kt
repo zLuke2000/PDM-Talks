@@ -14,12 +14,12 @@ import kotlinx.android.synthetic.main.activity_registrazione.TF_EmailLogin
 
 class Login : AppCompatActivity() {
     private val TAG = "Activity_Login"
-    private lateinit var auth: FirebaseAuth
+    private lateinit var myAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        auth = Firebase.auth
+        myAuth = Firebase.auth
     }
 
     fun loginUtente(view: View) {
@@ -27,13 +27,11 @@ class Login : AppCompatActivity() {
         val email: String = TF_EmailLogin.text.toString().trim()
         Log.i(TAG, "email: $email")
         Log.i(TAG, "psw: $password")
-        if(Authentication().autenticazioneUtenteNomePassword(this, auth, email, password)) {
-            Log.i(TAG, "ATTENZIONE IF")
-            finish()
-        } else {
-            Log.i(TAG, "ATTENZIONE ELSE")
-        }
+        Authentication().autenticazioneUtenteNomePassword(this, baseContext, myAuth, email, password)
+    }
 
+    fun chiudiActivity() {
+        finish()
     }
 
     fun registraNuovoCliente(view: View) {

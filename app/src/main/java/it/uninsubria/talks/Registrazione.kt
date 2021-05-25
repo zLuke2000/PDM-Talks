@@ -33,17 +33,15 @@ class Registrazione : AppCompatActivity() {
         if(checkName(TF_RealName, 2, 16) and checkName(TF_RealSurname, 3, 16) and checkEmail(email) and checkPassword(TF_Password, 6) and checkName(TF_Nickname, 4, 30)) {
             Log.i(TAG, "Controllo OK")
             Database().addUserToDB(name, surname, email, nickname)
-            if(Authentication().registraUtenteNomePassword(this, myAuth, email, password)) {
-                Toast.makeText(baseContext, "Autenticazione Fallita", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(baseContext, "Utente registrato con successo", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, Login::class.java))
-            }
+            Authentication().registraUtenteNomePassword(this, baseContext, myAuth, email, password)
         } else {
-            Log.e(TAG, "[REG] ERRORE - Controllo non soddisfatto")
+            Log.e(TAG, "ERRORE - Controllo non soddisfatto")
         }
     }
 
+    fun chiudiActivity() {
+        finish()
+    }
     // controllo lunghezza nome, cognome e nickname
     private fun checkName(tf: EditText, min: Int, max: Int): Boolean {
         if(tf.text.length < min) {
