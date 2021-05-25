@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null)
         val currentUser = myAuth.currentUser
-        if(currentUser != null) {
+        if(currentUser == null) {
             Log.i(TAG, "[MAIN] Passo alla schermata <Login>")
             startActivity(Intent(this, Login::class.java))
         } else {
