@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreaPost">
+    tools:context=".CreaTalk">
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/TA_Talk"
         android:layout_width="366dp"
         android:layout_height="208dp"
         android:layout_marginBottom="312dp"
         android:drawableTint="@color/orange_light"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textLongMessage|textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="New post"
+        android:text="@string/newPost"
         android:textColor="@color/orange_light"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,12 +47,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/B_UploadPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:text="Submit"
+        android:layout_marginTop="104dp"
+        android:onClick="creaNuovoTalk"
+        android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/TA_Talk" />
 </androidx.constraintlayout.widget.ConstraintLayout>

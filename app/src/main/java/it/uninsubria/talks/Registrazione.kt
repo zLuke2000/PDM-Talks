@@ -37,12 +37,12 @@ class Registrazione : AppCompatActivity() {
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "[REG] createUserWithEmail:success")
-                            Toast.makeText(baseContext, "Utente registrato con successo", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(baseContext, R.string.SignInOK, Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, MainActivity::class.java))
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "[REG] createUserWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "Autenticazione Fallita", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(baseContext, R.string.SignInKO, Toast.LENGTH_SHORT).show()
                         }
                     }
         } else {
@@ -50,16 +50,13 @@ class Registrazione : AppCompatActivity() {
         }
     }
 
-    fun apriLogin() {
-
-    }
     // controllo lunghezza nome, cognome e nickname
     private fun checkName(tf: EditText, min: Int, max: Int): Boolean {
         if(tf.text.length < min) {
-            tf.error = "(min: $min characters)"
+            tf.error = getString(R.string.minChar).replace("$", "" + min)
             return false
         } else if(tf.text.length > max) {
-            tf.error = "(max: $max characters)"
+            tf.error = getString(R.string.maxChar).replace("$", "" + min)
             return false
         }
         return true
@@ -78,7 +75,7 @@ class Registrazione : AppCompatActivity() {
     // controllo password
     private fun checkPassword(pass: EditText, min: Int): Boolean {
        if(pass.text.length < min) {
-           pass.error = "(min: $min characters)"
+           pass.error = getString(R.string.minChar).replace("$", "" + min)
            return false
        } else {
            return true

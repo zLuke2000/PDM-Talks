@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_registrazione.TF_EmailLogin
@@ -25,20 +26,19 @@ class Login : AppCompatActivity() {
     fun loginUtente(view: View) {
         val password: String = TF_PasswordLogin.text.toString().trim()
         val email: String = TF_EmailLogin.text.toString().trim()
-        Log.i(TAG, "email: $email")
-        Log.i(TAG, "psw: $password")
+
         if(checkEmail(email) and checkPassword(password, 6)) {
             myAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success")
-                            Toast.makeText(baseContext, "Accesso effettuato", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(baseContext, R.string.loginOK, Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, MainActivity::class.java))
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "Accesso fallito", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(baseContext, R.string.loginKO, Toast.LENGTH_SHORT).show()
                         }
                     }
         }
@@ -49,7 +49,7 @@ class Login : AppCompatActivity() {
         if(android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true
         } else {
-            TF_PasswordLogin.error = getString(R.string.invalidEmail)
+            TF_EmailLogin.error = getString(R.string.invalidEmail)
             return false
         }
     }
@@ -57,7 +57,7 @@ class Login : AppCompatActivity() {
     // controllo password
     private fun checkPassword(pass: String, min: Int): Boolean {
         if(pass.length < min) {
-            TF_EmailLogin.error = "(min: $min characters)"
+            TF_PasswordLogin.error = getString(R.string.minChar).replace("$", "" + min)
             return false
         } else {
             return true

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Talks">
         <activity android:name=".Registrazione"/>
-        <activity android:name=".CreaPost" />
+        <activity android:name=".CreaTalk" />
         <activity android:name=".Profilo" />
         <activity android:name=".Login" />
         <activity android:name=".MainActivity">

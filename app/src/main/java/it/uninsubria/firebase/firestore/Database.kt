@@ -1,7 +1,9 @@
 package it.uninsubria.firebase.firestore
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class Database constructor(){
     val TAG = "Database"
@@ -16,7 +18,24 @@ class Database constructor(){
 
         db.collection("utenti")
             .add(utente)
-            .addOnSuccessListener { documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id) }
-            .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
+            .addOnSuccessListener { documentReference -> Log.d(TAG, "DocumentSnapshot Utente aggiunto con ID: " + documentReference.id) }
+            .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento utente del DB", e) }
+    }
+
+    fun addTalkToDB (nickname: String, text: String) {
+        val talk: MutableMap<String, Any> = HashMap()
+        talk["nickname"] = nickname
+        talk["text"] = text
+        talk["timestamp"] = FieldValue.serverTimestamp()
+
+        db.collection("talks")
+            .add(talk)
+            .addOnSuccessListener { documentReference ->
+                Log.d(
+                    TAG,
+                    "DocumentSnapshot Talk aggiunto con ID: " + documentReference.id
+                )
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento talk del DB", e) }
     }
 }
