@@ -10,7 +10,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import it.uninsubria.firebase.firestore.Database
-import kotlinx.android.synthetic.main.activity_crea_post.*
+import kotlinx.android.synthetic.main.activity_crea_talk.*
 
 class CreaTalk : AppCompatActivity() {
 
@@ -20,14 +20,14 @@ class CreaTalk : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crea_post)
+        setContentView(R.layout.activity_crea_talk)
         myAuth = Firebase.auth
     }
 
     fun creaNuovoTalk(v: View) {
-        val testoTalk: String = TA_Talk.text.toString().trim()
-        if(testoTalk.length > 4) {
-            db.collection("utenti")
+        val testoTalk: String = ET_testoTalk.text.toString().trim()
+        if(testoTalk.length >= 4) {
+            db.collection("utenti").whereEqualTo("email", myAuth.currentUser.email)
                     .get()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -36,7 +36,7 @@ class CreaTalk : AppCompatActivity() {
                                 if (document.data["email"]?.equals(myAuth.currentUser.email)!!) {
                                     Database().addTalkToDB(document.data["nickname"] as String, testoTalk)
                                     Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
-                                    TA_Talk.setText("")
+                                    ET_testoTalk.setText("")
                                 }
                             }
                         } else {
@@ -44,7 +44,7 @@ class CreaTalk : AppCompatActivity() {
                         }
                     }
         } else {
-            TA_Talk.error = getString(R.string.invalidTalkLength)
+            ET_testoTalk.error = getString(R.string.invalidTalkLength)
         }
     }
 }
