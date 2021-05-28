@@ -11,10 +11,11 @@
     <string name="nickname">Nickname</string>
     <string name="login_password">Password</string>
     <string name="join_now">Don\'t have an account? Join Talks now!</string>
-    <string name="login">Login</string>
+    <string name="talkHint">Insert here your Talk message</string>
+    <string name="login">LOG-IN</string>
     <string name="signin">SIGN-IN</string>
     <string name="sign_up">SIGN-UP</string>
-    <string name="newPost">NEW POST</string>
+    <string name="newPost">NEW TALK</string>
     <string name="submit">SUBMIT</string>
 
     <!-- Stringhe Toast -->
@@ -23,6 +24,10 @@
     <string name="loginKO">Access denied</string>
     <string name="SignInOK">User successfully registered</string>
     <string name="SignInKO">Unable to register user</string>
+
+    <!-- Stringhr Popup -->
+    <string name="switchToNight">Switch to Night Mode</string>
+    <string name="switchToLight">Switch to Light Mode</string>
     <string name="logOut">LOGOUT</string>
 
     <!-- Stringhe Error -->
