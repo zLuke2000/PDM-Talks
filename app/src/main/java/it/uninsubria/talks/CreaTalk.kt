@@ -26,7 +26,11 @@ class CreaTalk : AppCompatActivity() {
 
     fun creaNuovoTalk(v: View) {
         val testoTalk: String = ET_testoTalk.text.toString().trim()
-        if(testoTalk.length >= 4) {
+        if(testoTalk.length < 4) {
+            ET_testoTalk.error = getString(R.string.talkTooShort)
+        } else if(testoTalk.length > 280) {
+            ET_testoTalk.error = getString(R.string.talkTooLong)
+        } else {
             db.collection("utenti").whereEqualTo("email", myAuth.currentUser.email)
                     .get()
                     .addOnCompleteListener { task ->
@@ -43,8 +47,6 @@ class CreaTalk : AppCompatActivity() {
                             Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
                         }
                     }
-        } else {
-            ET_testoTalk.error = getString(R.string.invalidTalkLength)
         }
     }
 }

@@ -32,7 +32,8 @@
 
     <!-- Stringhe Error -->
     <string name="invalidEmail">Invalid email</string>
-    <string name="invalidTalkLength">Warning, the talk must be at least 4 characters</string>
+    <string name="talkTooShort">Warning, the talk must be at least 4 characters</string>
+    <string name="talkTooLong">Warning, the talk limit is 280 characters</string>
     <string name="minChar">minimum: $ characters</string>
     <string name="maxChar">maximum: $ characters</string>
 

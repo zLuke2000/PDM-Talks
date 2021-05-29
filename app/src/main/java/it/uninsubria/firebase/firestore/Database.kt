@@ -25,7 +25,7 @@ class Database constructor(){
     fun addTalkToDB (nickname: String, text: String) {
         val talk: MutableMap<String, Any> = HashMap()
         talk["nickname"] = nickname
-        talk["text"] = text
+        talk["content"] = text
         talk["timestamp"] = FieldValue.serverTimestamp()
 
         db.collection("talks")
