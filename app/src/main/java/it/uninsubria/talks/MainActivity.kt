@@ -9,23 +9,37 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
-import it.uninsubria.adapter.ListAdapter
+import it.uninsubria.adapter.RVTAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "Main_Activity"
     private lateinit var myAuth: FirebaseAuth
     var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var talksArrayList: ArrayList<Talks>
+    private lateinit var rvtAdapter: RVTAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         //Firebase - authentication
         myAuth = Firebase.auth
+        setContentView(R.layout.activity_main)
+        recyclerView = talksRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
+        talksArrayList = arrayListOf()
+
+        rvtAdapter = RVTAdapter(talksArrayList)
+
+        recyclerView.adapter = rvtAdapter
     }
 
     public override fun onStart() {
@@ -36,38 +50,35 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, "[MAIN] Passo alla schermata <Login>")
             startActivity(Intent(this, Login::class.java))
         } else {
-            setContentView(R.layout.activity_main)
-            aggiornamentoInterfaccia()
+            eventChangeListener()
+        }
+
+        swipeRefreshLayout.setOnRefreshListener {
+            eventChangeListener()
+            swipeRefreshLayout.isRefreshing = false
         }
     }
 
-    private fun aggiornamentoInterfaccia() {
-        var nicknameList = mutableListOf<String>()
-        var contentList = mutableListOf<String>()
-
+    private fun eventChangeListener() {
         //DOWNLOAD DATA FROM FIRESTORE DB
         db.collection("talks")
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
-                            nicknameList.add(document.data["nickname"] as String)
-                            contentList.add(document.data["text"] as String)
-                        }
-                    } else {
-                        Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .addSnapshotListener(object : EventListener<QuerySnapshot> {
+            override fun onEvent(value: QuerySnapshot?,
+                                 error: FirebaseFirestoreException?) {
+                if(error != null) {
+                    Log.e(TAG, "Firestore error: " + error.message.toString())
+                    return
+                }
+                talksArrayList.clear()
+                for(dc : DocumentChange in value?.documentChanges!!) {
+                    if(dc.type == DocumentChange.Type.ADDED) {
+                        talksArrayList.add(dc.document.toObject(Talks::class.java))
                     }
                 }
-
-        val myListAdapter = ListAdapter(this, nicknameList, contentList)
-        main_listview.adapter = myListAdapter
-
-        main_listview.setOnItemClickListener(){adapterView, view, position, id ->
-            val itemAtPos = adapterView.getItemAtPosition(position)
-            val itemIdAtPos = adapterView.getItemIdAtPosition(position)
-            Toast.makeText(this, "Click on item at $itemAtPos its item id $itemIdAtPos", Toast.LENGTH_LONG).show()
-        }
+                rvtAdapter.notifyDataSetChanged()
+            }
+        })
     }
 
     fun openSettings(v: View) {
