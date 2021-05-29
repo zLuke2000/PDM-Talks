@@ -1,6 +1,8 @@
 package it.uninsubria.talks
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -18,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
     private val TAG = "Main_Activity"
     private lateinit var myAuth: FirebaseAuth
@@ -25,21 +28,37 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
+    private var nightMode: Int = getDefaultNightMode();
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+    private lateinit var settingsPopup: PopupMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Firebase - authentication
         myAuth = Firebase.auth
+
+        //Recycler View
         setContentView(R.layout.activity_main)
         recyclerView = talksRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
         talksArrayList = arrayListOf()
-
         rvtAdapter = RVTAdapter(talksArrayList)
-
         recyclerView.adapter = rvtAdapter
+
+        //Dark-Light Mode
+        sharedPreferences = getSharedPreferences("SharedPrefs", MODE_PRIVATE);
+        nightMode = sharedPreferences.getInt("NightModeIntStatus", MODE_NIGHT_NO)
+        setDefaultNightMode(nightMode)
+
+        settingsPopup = PopupMenu(this, settingsButton)
+        settingsPopup.menuInflater.inflate(R.menu.popup_settings, settingsPopup.menu)
+        if((nightMode == MODE_NIGHT_NO)) {
+            settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToNight)
+        } else {
+            settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToLight)
+        }
     }
 
     public override fun onStart() {
@@ -50,10 +69,12 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, "[MAIN] Passo alla schermata <Login>")
             startActivity(Intent(this, Login::class.java))
         } else {
+            talksArrayList.clear()
             eventChangeListener()
         }
 
         swipeRefreshLayout.setOnRefreshListener {
+            talksArrayList.clear()
             eventChangeListener()
             swipeRefreshLayout.isRefreshing = false
         }
@@ -70,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "Firestore error: " + error.message.toString())
                     return
                 }
-                talksArrayList.clear()
                 for(dc : DocumentChange in value?.documentChanges!!) {
                     if(dc.type == DocumentChange.Type.ADDED) {
                         talksArrayList.add(dc.document.toObject(Talks::class.java))
@@ -82,21 +102,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openSettings(v: View) {
-        val currentUIMode: String
-        val settingsPopup = PopupMenu(this, settingsButton)
-        settingsPopup.menuInflater.inflate(R.menu.popup_settings, settingsPopup.menu)
-
-        if((getDefaultNightMode() == MODE_NIGHT_UNSPECIFIED) or (getDefaultNightMode() == MODE_NIGHT_NO)) {
-            currentUIMode = "Light"
+        if(nightMode == MODE_NIGHT_NO) {
             settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToNight)
         } else {
-            currentUIMode = "Night"
             settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToLight)
         }
-
         settingsPopup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.nightModeButton -> switchUIMode(currentUIMode)
+                R.id.nightModeButton -> switchUIMode()
                 R.id.logoutButton -> doLogout()
             }
             true
@@ -104,11 +117,17 @@ class MainActivity : AppCompatActivity() {
         settingsPopup.show()
     }
 
-    private fun switchUIMode(mode: String) {
-        if(mode == "Light") {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+    private fun switchUIMode() {
+        if(nightMode == MODE_NIGHT_NO) {
+            setDefaultNightMode(MODE_NIGHT_YES)
+            editor = sharedPreferences.edit();
+            editor.putInt("NightModeIntStatus", getDefaultNightMode());
+            editor.apply();
         } else {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+            setDefaultNightMode(MODE_NIGHT_NO)
+            editor = sharedPreferences.edit();
+            editor.putInt("NightModeIntStatus", getDefaultNightMode());
+            editor.apply();
         }
     }
 
