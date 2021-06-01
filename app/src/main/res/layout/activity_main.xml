@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -64,7 +63,7 @@
             app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/talksRecyclerView"
+            android:id="@+id/UserTalksRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
