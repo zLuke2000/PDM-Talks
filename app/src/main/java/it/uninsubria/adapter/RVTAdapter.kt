@@ -1,36 +1,51 @@
 package it.uninsubria.adapter
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.RecyclerView
 import it.uninsubria.talks.R
 import it.uninsubria.talks.Talks
 
-class RVTAdapter(private val talksList : ArrayList<Talks>) : RecyclerView.Adapter<RVTAdapter.MyViewHolder>() {
+/*
+    RVTAdapert -> RecyclerView Talks Adapter
+    TRHolder   -> Talk Row Holder
+ */
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RVTAdapter.MyViewHolder {
+class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: OnTalkClickListener?) : RecyclerView.Adapter<RVTAdapter.TRHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TRHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.row_talk, parent, false)
-
-        return MyViewHolder(itemView)
+        return TRHolder(itemView)
     }
 
-    override fun getItemCount(): Int {
-        return talksList.size
-    }
+    override fun onBindViewHolder(holder: TRHolder, position: Int) {
+        val currentTalk : Talks = talksList[position]
 
-    override fun onBindViewHolder(holder: RVTAdapter.MyViewHolder, position: Int) {
-        val talk : Talks = talksList[position]
-        holder.nickname.text = talk.nickname
-        holder.content.text = talk.content
+        holder.nickname.text = currentTalk.nickname
+        holder.content.text = currentTalk.content
     }
+    override fun getItemCount(): Int = talksList.size
 
-    public class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TRHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val nickname : TextView = itemView.findViewById(R.id.TV_nickname)
         val content : TextView = itemView.findViewById(R.id.TV_content)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position: Int = adapterPosition
+            if(position != RecyclerView.NO_POSITION) {
+                listener?.onTalkclick(position)
+            }
+        }
+    }
+
+    interface OnTalkClickListener {
+        fun onTalkclick(position: Int) {
+        }
     }
 }

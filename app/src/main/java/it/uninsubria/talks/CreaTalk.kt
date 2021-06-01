@@ -16,7 +16,6 @@ class CreaTalk : AppCompatActivity() {
 
     private val TAG = "Activity_CreaTalk"
     private lateinit var myAuth: FirebaseAuth
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,12 +25,12 @@ class CreaTalk : AppCompatActivity() {
 
     fun creaNuovoTalk(v: View) {
         val testoTalk: String = ET_testoTalk.text.toString().trim()
-        if(testoTalk.length < 4) {
-            ET_testoTalk.error = getString(R.string.talkTooShort)
-        } else if(testoTalk.length > 280) {
-            ET_testoTalk.error = getString(R.string.talkTooLong)
+        if (testoTalk.length < 4) {
+            ET_testoTalk.error = getString(R.string.talkTooShort).replace("$", "4")
+        } else if (testoTalk.length > 500) {
+            ET_testoTalk.error = getString(R.string.talkTooLong).replace("$", "500")
         } else {
-            db.collection("utenti").whereEqualTo("email", myAuth.currentUser.email)
+            Database().db.collection("utenti").whereEqualTo("email", myAuth.currentUser.email)
                     .get()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {

@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class Database constructor(){
     val TAG = "Database"
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     fun addUserToDB (name: String, surname: String, email: String, nickname: String) {
         val utente: MutableMap<String, Any> = HashMap()

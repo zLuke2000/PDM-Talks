@@ -1,6 +1,5 @@
 package it.uninsubria.talks
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,23 +8,20 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
+import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     private val TAG = "Main_Activity"
     private lateinit var myAuth: FirebaseAuth
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private lateinit var recyclerView: RecyclerView
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
     private var nightMode: Int = getDefaultNightMode();
@@ -40,12 +36,11 @@ class MainActivity : AppCompatActivity() {
 
         //Recycler View
         setContentView(R.layout.activity_main)
-        recyclerView = talksRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+        UserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
+        UserTalksRecyclerView.setHasFixedSize(true)
         talksArrayList = arrayListOf()
-        rvtAdapter = RVTAdapter(talksArrayList)
-        recyclerView.adapter = rvtAdapter
+        rvtAdapter = RVTAdapter(talksArrayList, this)
+        UserTalksRecyclerView.adapter = rvtAdapter
 
         //Dark-Light Mode
         sharedPreferences = getSharedPreferences("SharedPrefs", MODE_PRIVATE);
@@ -82,10 +77,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun eventChangeListener() {
         //DOWNLOAD DATA FROM FIRESTORE DB
-        db.collection("talks")
+        Database().db.collection("talks")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(object : EventListener<QuerySnapshot> {
-            override fun onEvent(value: QuerySnapshot?,
+                    override fun onEvent(value: QuerySnapshot?,
                                  error: FirebaseFirestoreException?) {
                 if(error != null) {
                     Log.e(TAG, "Firestore error: " + error.message.toString())
@@ -99,6 +94,12 @@ class MainActivity : AppCompatActivity() {
                 rvtAdapter.notifyDataSetChanged()
             }
         })
+    }
+
+    override fun onTalkclick(position: Int) {
+        val intent = Intent(this, Profilo::class.java)
+        intent.putExtra("NICKNAME", talksArrayList[position].nickname)
+        startActivity(intent)
     }
 
     fun openSettings(v: View) {

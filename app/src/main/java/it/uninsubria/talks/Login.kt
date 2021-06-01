@@ -27,7 +27,7 @@ class Login : AppCompatActivity() {
         val password: String = TF_PasswordLogin.text.toString().trim()
         val email: String = TF_EmailLogin.text.toString().trim()
 
-        if(checkEmail(email) and checkPassword(password, 6)) {
+        if (checkEmail(email) and checkPassword(password, 6)) {
             myAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
@@ -46,7 +46,7 @@ class Login : AppCompatActivity() {
 
     // controllo email
     private fun checkEmail(email: String): Boolean {
-        if(android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true
         } else {
             TF_EmailLogin.error = getString(R.string.invalidEmail)
@@ -56,7 +56,7 @@ class Login : AppCompatActivity() {
 
     // controllo password
     private fun checkPassword(pass: String, min: Int): Boolean {
-        if(pass.length < min) {
+        if (pass.length < min) {
             TF_PasswordLogin.error = getString(R.string.minChar).replace("$", "" + min)
             return false
         } else {
