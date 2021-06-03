@@ -12,6 +12,7 @@
     <string name="login_password">Password</string>
     <string name="join_now">Don\'t have an account? Join Talks now!</string>
     <string name="talkHint">Insert here your Talk message</string>
+    <string name="linkHint">Insert here the Source (link only)</string>
     <string name="login">LOG-IN</string>
     <string name="signin">SIGN-IN</string>
     <string name="sign_up">SIGN-UP</string>

@@ -22,10 +22,11 @@ class Database constructor(){
             .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento utente del DB", e) }
     }
 
-    fun addTalkToDB (nickname: String, text: String) {
+    fun addTalkToDB (nickname: String, text: String, linkSource: String) {
         val talk: MutableMap<String, Any> = HashMap()
         talk["nickname"] = nickname
         talk["content"] = text
+        talk["linkSource"] = linkSource
         talk["timestamp"] = FieldValue.serverTimestamp()
 
         db.collection("talks")

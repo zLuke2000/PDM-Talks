@@ -2,6 +2,7 @@ package it.uninsubria.talks
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.system.Os
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -13,7 +14,6 @@ import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_crea_talk.*
 
 class CreaTalk : AppCompatActivity() {
-
     private val TAG = "Activity_CreaTalk"
     private lateinit var myAuth: FirebaseAuth
 
@@ -23,8 +23,13 @@ class CreaTalk : AppCompatActivity() {
         myAuth = Firebase.auth
     }
 
-    fun creaNuovoTalk(v: View) {
+    fun createNewTalk(v: View) {
         val testoTalk: String = ET_testoTalk.text.toString().trim()
+        var linkSource: String = ET_linkSource.text.toString().trim()
+        if(linkSource.isEmpty()) {
+            linkSource = ""
+        }
+
         if (testoTalk.length < 4) {
             ET_testoTalk.error = getString(R.string.talkTooShort).replace("$", "4")
         } else if (testoTalk.length > 500) {
@@ -37,7 +42,7 @@ class CreaTalk : AppCompatActivity() {
                             for (document in task.result!!) {
                                 Log.d(TAG, document.id + " => " + document.data)
                                 if (document.data["email"]?.equals(myAuth.currentUser.email)!!) {
-                                    Database().addTalkToDB(document.data["nickname"] as String, testoTalk)
+                                    Database().addTalkToDB(document.data["nickname"] as String, testoTalk, linkSource)
                                     Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
                                     ET_testoTalk.setText("")
                                 }
