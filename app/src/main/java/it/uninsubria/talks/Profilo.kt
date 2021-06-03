@@ -1,8 +1,8 @@
 package it.uninsubria.talks
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.*
@@ -10,7 +10,8 @@ import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_crea_talk.*
 import kotlinx.android.synthetic.main.activity_profilo.*
-import kotlinx.coroutines.android.awaitFrame
+import java.io.File
+
 
 class Profilo : AppCompatActivity() {
     private val TAG = "Activity_Profilo"
@@ -22,8 +23,11 @@ class Profilo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         nickname = intent.getStringExtra("NICKNAME").toString()
 
+        // Carica il layout
         setContentView(R.layout.activity_profilo)
+        // Imposta il nickanme
         TV_NicknameProfilo.text = nickname
+        // Compila gli altri campi (Nome, Cognome, Immagine profilo)
         getUserData()
 
         SingleUserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -46,6 +50,7 @@ class Profilo : AppCompatActivity() {
     }
 
     private fun getUserData() {
+        // Imposta Nome e Cognome
         Database().db.collection("utenti")
                 .whereEqualTo("nickname", nickname)
                 .get()
@@ -59,6 +64,16 @@ class Profilo : AppCompatActivity() {
                         Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
                     }
                 }
+        // Imposta immagine profilo
+        val path = MainActivity().storage.reference.child("AccountIcon/$nickname.jpg")
+        val localFile = File.createTempFile("tempImg", "jpg")
+        path.getFile(localFile).addOnSuccessListener {
+            val filePath = localFile.path
+            val bitmap = BitmapFactory.decodeFile(filePath)
+            immagine_Profilo.setImageBitmap(bitmap)
+        }.addOnFailureListener {
+            // Handle any errors
+        }
     }
 
     private fun eventChangeListener() {
@@ -67,8 +82,10 @@ class Profilo : AppCompatActivity() {
                 .whereEqualTo("nickname", nickname)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(object : EventListener<QuerySnapshot> {
-                    override fun onEvent(value: QuerySnapshot?,
-                                         error: FirebaseFirestoreException?) {
+                    override fun onEvent(
+                        value: QuerySnapshot?,
+                        error: FirebaseFirestoreException?
+                    ) {
                         if (error != null) {
                             Log.e(TAG, "Firestore error: " + error.message.toString())
                             return

@@ -26,8 +26,10 @@
                 android:id="@+id/immagine_Profilo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/default_account_image"
                 android:contentDescription="@string/immagine_schermata_profilo"
-                tools:srcCompat="@mipmap/ic_launcher_round" />
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="match_parent"

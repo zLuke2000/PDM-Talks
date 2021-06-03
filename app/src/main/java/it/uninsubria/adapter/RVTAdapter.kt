@@ -3,6 +3,7 @@ package it.uninsubria.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.uninsubria.talks.R
@@ -25,12 +26,17 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
 
         holder.nickname.text = currentTalk.nickname
         holder.content.text = currentTalk.content
+        holder.linkSource.text = currentTalk.linkSource
+        if(holder.linkSource.text.isNotEmpty()) {
+            holder.linkSource.textSize = 14F
+        }
     }
     override fun getItemCount(): Int = talksList.size
 
     inner class TRHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val nickname : TextView = itemView.findViewById(R.id.TV_nickname)
         val content : TextView = itemView.findViewById(R.id.TV_content)
+        val linkSource : TextView = itemView.findViewById(R.id.TV_linkSource)
 
         init {
             itemView.setOnClickListener(this)

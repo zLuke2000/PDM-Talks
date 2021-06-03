@@ -2,13 +2,11 @@ package it.uninsubria.talks
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.system.Os
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_crea_talk.*
@@ -28,6 +26,8 @@ class CreaTalk : AppCompatActivity() {
         var linkSource: String = ET_linkSource.text.toString().trim()
         if(linkSource.isEmpty()) {
             linkSource = ""
+        } else if((!linkSource.startsWith("http://")) and (!linkSource.startsWith("https://"))) {
+            linkSource = "http://$linkSource";
         }
 
         if (testoTalk.length < 4) {
@@ -42,9 +42,12 @@ class CreaTalk : AppCompatActivity() {
                             for (document in task.result!!) {
                                 Log.d(TAG, document.id + " => " + document.data)
                                 if (document.data["email"]?.equals(myAuth.currentUser.email)!!) {
-                                    Database().addTalkToDB(document.data["nickname"] as String, testoTalk, linkSource)
-                                    Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
-                                    ET_testoTalk.setText("")
+                                    Database().addTalkToDB(document.data["nickname"] as String, testoTalk, linkSource) { result ->
+                                        if(result) {
+                                            Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
+                                            ET_testoTalk.setText("")
+                                        }
+                                    }
                                 }
                             }
                         } else {

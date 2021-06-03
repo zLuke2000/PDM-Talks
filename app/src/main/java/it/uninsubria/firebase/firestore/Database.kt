@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class Database constructor(){
+class Database {
     val TAG = "Database"
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -22,7 +22,7 @@ class Database constructor(){
             .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento utente del DB", e) }
     }
 
-    fun addTalkToDB (nickname: String, text: String, linkSource: String) {
+    fun addTalkToDB (nickname: String, text: String, linkSource: String, callback: (Boolean) -> Unit) {
         val talk: MutableMap<String, Any> = HashMap()
         talk["nickname"] = nickname
         talk["content"] = text
@@ -31,12 +31,13 @@ class Database constructor(){
 
         db.collection("talks")
             .add(talk)
-            .addOnSuccessListener { documentReference ->
-                Log.d(
-                    TAG,
-                    "DocumentSnapshot Talk aggiunto con ID: " + documentReference.id
-                )
+            .addOnSuccessListener {
+                documentReference -> Log.d(TAG,"DocumentSnapshot Talk aggiunto con ID: " + documentReference.id)
+                callback(true)
             }
-            .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento talk del DB", e) }
+            .addOnFailureListener {
+                e -> Log.w(TAG, "[ERRORE] caricamento talk del DB", e)
+                callback(true)
+            }
     }
 }

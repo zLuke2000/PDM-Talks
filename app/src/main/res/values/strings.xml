@@ -27,10 +27,13 @@
     <string name="loginKO">Access denied</string>
     <string name="SignInOK">User successfully registered</string>
     <string name="SignInKO">Unable to register user</string>
+    <string name="ImageUpdated">Account picture successfully updated</string>
+    <string name="ImageNotUpdated">Unable to update account picture</string>
 
     <!-- Stringhr Popup -->
     <string name="switchToNight">Switch to Night Mode</string>
     <string name="switchToLight">Switch to Light Mode</string>
+    <string name="changePicture">Change account picture</string>
     <string name="logOut">LOGOUT</string>
 
     <!-- Stringhe Error -->
