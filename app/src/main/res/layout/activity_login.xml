@@ -11,28 +11,24 @@
         android:id="@+id/immagineLogin"
         android:layout_width="240dp"
         android:layout_height="240dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/TF_EmailLogin"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@mipmap/ic_launcher"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <EditText
         android:id="@+id/TF_EmailLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/TF_PasswordLogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/immagineLogin" />
 
@@ -40,14 +36,12 @@
         android:id="@+id/TF_PasswordLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/login_password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/b_login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TF_EmailLogin" />
 
@@ -57,31 +51,42 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/button_style"
+        android:background="@drawable/button_style_orange"
         android:onClick="loginUtente"
         android:text="@string/login"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/b_registrati"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TF_PasswordLogin" />
 
-    <android.widget.TextView
-        android:id="@+id/b_registrati"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:onClick="registraNuovoCliente"
-        android:text="@string/join_now"
-        android:textColor="@color/orange_dark"
-        android:textSize="18sp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/b_login" />
+        app:layout_constraintTop_toBottomOf="@+id/b_login">
+
+        <android.widget.TextView
+            android:id="@+id/b_registrati"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join_now_1"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <android.widget.TextView
+            android:id="@+id/b_registrati_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:onClick="registraNuovoCliente"
+            android:text="@string/join_now_2"
+            android:textColor="@color/orange_light"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

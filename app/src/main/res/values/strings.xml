@@ -10,9 +10,10 @@
     <string name="password">Password (min 6 characters)</string>
     <string name="nickname">Nickname</string>
     <string name="login_password">Password</string>
-    <string name="join_now">Don\'t have an account? Join Talks now!</string>
+    <string name="join_now_1">Don\'t have an account?</string>
+    <string name="join_now_2">Join Talks now!</string>
     <string name="talkHint">Insert here your Talk message</string>
-    <string name="linkHint">Insert here the Source (link only)</string>
+    <string name="linkHint">Insert here the Source</string>
     <string name="login">LOG-IN</string>
     <string name="signin">SIGN-IN</string>
     <string name="sign_up">SIGN-UP</string>
@@ -20,6 +21,7 @@
     <string name="submit">SUBMIT</string>
     <string name="tNickanme">template-nickname</string> <!-- Usato solo in row-talk come template per la creazione dell'interfaccia grafica -->
     <string name="tContent">template-content</string>   <!-- Usato solo in row-talk come template per la creazione dell'interfaccia grafica -->
+    <string name="inserImageHere">INSERT\nIMAGE\nHERE</string>
 
     <!-- Stringhe Toast -->
     <string name="talkSent">Talk successfully sent</string>

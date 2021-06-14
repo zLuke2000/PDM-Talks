@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/button_style"
+        android:background="@drawable/button_style_orange"
         android:onClick="checkRegistrazione"
         android:text="@string/signin"
         android:textSize="20sp"

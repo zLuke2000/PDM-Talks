@@ -5,25 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:shadowColor="#FFFFFF"
             android:text="@string/app_name"
             android:textColor="@color/orange_light"
             android:textSize="40sp"
             app:layout_constraintBottom_toTopOf="@+id/UserTalksRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,13 +50,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="#FFFFFF"
-            android:foreground="@drawable/settings_drawable"
-            android:foregroundTint="@color/orange_light"
+            android:background="@color/orange_light"
+            android:backgroundTint="@android:color/transparent"
             android:onClick="openSettings"
             android:rotationY="180"
             android:src="@android:drawable/ic_menu_sort_by_size"
-            android:tint="#F9A825"
+            android:tint="@color/orange_light"
             android:verticalScrollbarPosition="defaultPosition"
             app:layout_constraintBottom_toTopOf="@+id/UserTalksRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
