@@ -27,7 +27,7 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
         holder.nickname.text = currentTalk.nickname
         holder.content.text = currentTalk.content
         holder.linkSource.text = currentTalk.linkSource
-        if(holder.linkSource.text.isNotEmpty()) {
+        if(holder.linkSource.text.length > 4) {
             holder.linkSource.textSize = 14F
         }
     }
