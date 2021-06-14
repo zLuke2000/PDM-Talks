@@ -4,6 +4,8 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.*
 import it.uninsubria.adapter.RVTAdapter
@@ -71,6 +73,7 @@ class Profilo : AppCompatActivity() {
             val bitmap = BitmapFactory.decodeFile(filePath)
             immagine_Profilo.setImageBitmap(bitmap)
         }.addOnFailureListener {
+            immagine_Profilo.setImageResource(R.drawable.default_account_image)
         }
     }
 

@@ -8,9 +8,11 @@
     android:layout_height="match_parent"
     tools:context=".Profilo">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/activity_profilo_xml_constraintlayout_scene">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -28,7 +30,7 @@
                 android:id="@+id/immagine_Profilo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@drawable/default_account_image"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/immagine_schermata_profilo"
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
@@ -79,5 +81,5 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="0.0" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
