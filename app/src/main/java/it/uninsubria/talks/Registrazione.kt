@@ -9,11 +9,11 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import it.uninsubria.firebase.firestore.Database
-import kotlinx.android.synthetic.main.activity_profilo.*
 import kotlinx.android.synthetic.main.activity_registrazione.*
 
 class Registrazione : AppCompatActivity() {
     private val TAG = "Activity_Registrazione"
+    private val myDB: Database = Database()
     private lateinit var myAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,38 +34,35 @@ class Registrazione : AppCompatActivity() {
         if (checkName(TF_RealName, 2, 16) and checkName(TF_RealSurname, 3, 16) and checkEmail(email) and checkPassword(TF_Password, 6) and checkName(TF_Nickname, 4, 30)) {
             Log.i(TAG, "Controllo OK")
             //Controllo nickname unico
-            Database().db.collection("utenti")
-                    .get()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            for (document in task.result!!) {
-                                if(document.data["nickname"]?.equals(nickname)!!) {
-                                    duplicato = true
-                                }
-                            }
-                            if(!duplicato) {
-                                Database().addUserToDB(name, surname, email, nickname)
-                                myAuth.createUserWithEmailAndPassword(email, password)
-                                        .addOnCompleteListener(this) { task ->
-                                            if (task.isSuccessful) {
-                                                // Sign in success, update UI with the signed-in user's information
-                                                Log.d(TAG, "[REG] createUserWithEmail:success")
-                                                Toast.makeText(baseContext, R.string.SignInOK, Toast.LENGTH_SHORT).show()
-                                                startActivity(Intent(this, MainActivity::class.java))
-                                            } else {
-                                                // If sign in fails, display a message to the user.
-                                                Log.w(TAG, "[REG] createUserWithEmail:failure", task.exception)
-                                                Toast.makeText(baseContext, R.string.SignInKO, Toast.LENGTH_SHORT).show()
-                                            }
-                                        }
-                            } else {
-                                Toast.makeText(baseContext, "" + getString(R.string.duplicateNickname).replace("$", nickname), Toast.LENGTH_SHORT).show()
-                            }
-                        } else {
-                            Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+            myDB.checkUniqueUser(nickname) { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        if(document.data["nickname"]?.equals(nickname)!!) {
+                            duplicato = true
                         }
                     }
-
+                    if(!duplicato) {
+                        myAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(this) { task ->
+                                    if (task.isSuccessful) {
+                                        // Sign in success
+                                        Log.d(TAG, "[REG] createUserWithEmail:success")
+                                        myDB.addUserToDB(name, surname, email, nickname)
+                                        Toast.makeText(baseContext, R.string.SignInOK, Toast.LENGTH_SHORT).show()
+                                        startActivity(Intent(this, MainActivity::class.java))
+                                    } else {
+                                        // If sign in fails
+                                        Log.w(TAG, "[REG] createUserWithEmail:failure", task.exception)
+                                        Toast.makeText(baseContext, R.string.SignInKO, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                    } else {
+                        Toast.makeText(baseContext, "" + getString(R.string.duplicateNickname).replace("$", nickname), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+                }
+            }
         } else {
             Log.e(TAG, "ERRORE - Controllo non soddisfatto")
         }

@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.*
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.firestore.Database
-import kotlinx.android.synthetic.main.activity_crea_talk.*
 import kotlinx.android.synthetic.main.activity_profilo.*
 import java.io.File
 
 
 class Profilo : AppCompatActivity() {
     private val TAG = "Activity_Profilo"
+    private val myDB: Database = Database()
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
     private lateinit var nickname: String
@@ -51,19 +51,18 @@ class Profilo : AppCompatActivity() {
 
     private fun getUserData() {
         // Imposta Nome e Cognome
-        Database().db.collection("utenti")
-                .whereEqualTo("nickname", nickname)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            TV_NomeProfilo.text = document.data["nome"].toString()
-                            TV_CognomeProfilo.text = document.data["cognome"].toString()
-                        }
-                    } else {
-                        Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
-                    }
+
+        myDB.getUser(nickname) { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    TV_NomeProfilo.text = document.data["nome"].toString()
+                    TV_CognomeProfilo.text = document.data["cognome"].toString()
                 }
+            } else {
+                Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+            }
+        }
+
         // Imposta immagine profilo
         val path = MainActivity().storage.reference.child("AccountIcon/$nickname.jpg")
         val localFile = File.createTempFile("tempImg", "jpg")
@@ -72,31 +71,18 @@ class Profilo : AppCompatActivity() {
             val bitmap = BitmapFactory.decodeFile(filePath)
             immagine_Profilo.setImageBitmap(bitmap)
         }.addOnFailureListener {
-            // Handle any errors
         }
     }
 
     private fun eventChangeListener() {
         //DOWNLOAD DATA FROM FIRESTORE DB
-        Database().db.collection("talks")
-                .whereEqualTo("nickname", nickname)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .addSnapshotListener(object : EventListener<QuerySnapshot> {
-                    override fun onEvent(
-                        value: QuerySnapshot?,
-                        error: FirebaseFirestoreException?
-                    ) {
-                        if (error != null) {
-                            Log.e(TAG, "Firestore error: " + error.message.toString())
-                            return
-                        }
-                        for (dc: DocumentChange in value?.documentChanges!!) {
-                            if (dc.type == DocumentChange.Type.ADDED) {
-                                talksArrayList.add(dc.document.toObject(Talks::class.java))
-                            }
-                        }
-                        rvtAdapter.notifyDataSetChanged()
-                    }
-                })
+        myDB.getSingleUserTalks(nickname) { value ->
+            for (dc: DocumentChange in value?.documentChanges!!) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    talksArrayList.add(dc.document.toObject(Talks::class.java))
+                }
+            }
+            rvtAdapter.notifyDataSetChanged()
+        }
     }
 }
