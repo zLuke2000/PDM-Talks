@@ -70,6 +70,7 @@
             android:background="@drawable/button_style_gray"
             android:text="@string/inserImageHere"
             android:textSize="12sp"
+            android:onClick="getPicture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

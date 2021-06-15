@@ -22,7 +22,7 @@ class Database {
             .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento utente del DB", e) }
     }
 
-    fun addTalkToDB (email: String, text: String, linkSource: String, callback: (Boolean) -> Unit) {
+    fun addTalkToDB (email: String, text: String, linkSource: String, callback: (Boolean, String) -> Unit) {
         val talk: MutableMap<String, Any> = HashMap()
         getNicknameByEmail(email) { nicknameRes ->
             if(nicknameRes != null) {
@@ -35,11 +35,11 @@ class Database {
                         .add(talk)
                         .addOnSuccessListener { documentReference ->
                             Log.d(TAG, "DocumentSnapshot Talk aggiunto con ID: " + documentReference.id)
-                            callback(true)
+                            callback(true, documentReference.id)
                         }
                         .addOnFailureListener { e ->
                             Log.w(TAG, "[ERRORE] caricamento talk del DB", e)
-                            callback(true)
+                            callback(false, "")
                         }
             } else {
                 Log.e(TAG, "nickname non trovato")

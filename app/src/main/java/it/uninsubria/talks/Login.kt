@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_registrazione.TF_EmailLogin
 
 class Login : AppCompatActivity() {
+    // Current activity TAG
     private val TAG = "Activity_Login"
     private var myAuth: Authentication = Authentication()
 

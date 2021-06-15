@@ -4,11 +4,10 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.*
 import it.uninsubria.adapter.RVTAdapter
+import it.uninsubria.firebase.Storage
 import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_profilo.*
 import java.io.File
@@ -17,6 +16,7 @@ import java.io.File
 class Profilo : AppCompatActivity() {
     private val TAG = "Activity_Profilo"
     private val myDB: Database = Database()
+    private val myStorage: Storage = Storage()
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
     private lateinit var nickname: String
@@ -66,14 +66,12 @@ class Profilo : AppCompatActivity() {
         }
 
         // Imposta immagine profilo
-        val path = MainActivity().storage.reference.child("AccountIcon/$nickname.jpg")
-        val localFile = File.createTempFile("tempImg", "jpg")
-        path.getFile(localFile).addOnSuccessListener {
-            val filePath = localFile.path
-            val bitmap = BitmapFactory.decodeFile(filePath)
-            immagine_Profilo.setImageBitmap(bitmap)
-        }.addOnFailureListener {
-            immagine_Profilo.setImageResource(R.drawable.default_account_image)
+        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { resultBitmap ->
+            if (resultBitmap != null) {
+                immagine_Profilo.setImageBitmap(resultBitmap)
+            } else {
+                immagine_Profilo.setImageResource(R.drawable.default_account_image)
+            }
         }
     }
 
@@ -82,7 +80,9 @@ class Profilo : AppCompatActivity() {
         myDB.getSingleUserTalks(nickname) { value ->
             for (dc: DocumentChange in value?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
-                    talksArrayList.add(dc.document.toObject(Talks::class.java))
+                    var currentTalk = dc.document.toObject(Talks::class.java)
+                    currentTalk.imagePath = dc.document.id
+                    talksArrayList.add(currentTalk)
                 }
             }
             rvtAdapter.notifyDataSetChanged()

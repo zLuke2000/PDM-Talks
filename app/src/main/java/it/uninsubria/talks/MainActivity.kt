@@ -17,9 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.*
-import com.google.firebase.storage.ktx.storage
 import it.uninsubria.adapter.RVTAdapter
+import it.uninsubria.firebase.Storage
 import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
@@ -28,13 +27,14 @@ import java.io.IOException
 
 
 class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
+    // Current activity TAG
     private val TAG = "Main_Activity"
     // Database
     private val myDB: Database = Database()
-    // Firebase AUTH
+    // Firebase Authentication
     private lateinit var myAuth: FirebaseAuth
     // Firebase Storage
-    var storage: FirebaseStorage = Firebase.storage
+    private val myStorage: Storage = Storage()
     private val PICK_IMAGE_REQUEST = 1
     // lista e adapter necessari per inizializzare la RecyclerView
     private lateinit var talksArrayList: ArrayList<Talks>
@@ -93,14 +93,21 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
 
     private fun eventChangeListener() {
         //DOWNLOAD DATA FROM FIRESTORE DB
-        myDB.getTalks() { value ->
-            for (dc: DocumentChange in value?.documentChanges!!) {
-                if (dc.type == DocumentChange.Type.ADDED) {
-                    talksArrayList.add(dc.document.toObject(Talks::class.java))
+        try {
+            myDB.getTalks() { value ->
+                for (dc: DocumentChange in value?.documentChanges!!) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        var currentTalk = dc.document.toObject(Talks::class.java)
+                        currentTalk.imagePath = dc.document.id
+                        talksArrayList.add(currentTalk)
+                    }
                 }
+                rvtAdapter.notifyDataSetChanged()
             }
-            rvtAdapter.notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            Log.e(TAG, e.printStackTrace().toString())
         }
+
     }
     override fun onTalkclick(position: Int) {
         val intent = Intent(this, Profilo::class.java)
@@ -165,18 +172,18 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
                        if (task.isSuccessful) {
                            for (document in task.result!!) {
                                try {
-                                   val accountRef = storage.reference.child("AccountIcon/${document.data["nickname"]}.jpg")
-                                   var bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
+                                   val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
                                    // Compressione
                                    val baos = ByteArrayOutputStream()
                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                                   val data = baos.toByteArray()
+                                   val imgData = baos.toByteArray()
                                    // Upload
-                                   var uploadTask = accountRef.putBytes(data)
-                                   uploadTask.addOnFailureListener {
-                                       Toast.makeText(baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
-                                   }.addOnSuccessListener {
-                                       Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
+                                   myStorage.uploadBitmap("AccountIcon/${document.data["nickname"]}.jpg", imgData) { result ->
+                                       if (result) {
+                                           Toast.makeText(baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
+                                       } else {
+                                           Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
+                                       }
                                    }
                                } catch (e: FileNotFoundException) {
                                    Log.e(TAG, e.printStackTrace().toString())
