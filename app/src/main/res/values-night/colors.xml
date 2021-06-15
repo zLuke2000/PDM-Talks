@@ -6,6 +6,8 @@
     <color name="dark_background">#FF121212</color>
     <color name="orange_light">#FFFFBB33</color>
     <color name="orange_dark">#FFFF8800</color>
-    <color name="default_link">#FF1A0DAB</color>
+    <color name="default_link">#6CAAED</color>
     <color name="yellow_textarea">#33FFBB33</color>
+    <color name="default_primary_text">#FFFFFFFF</color>
+    <color name="default_secondary_text">#BFBFBF</color>
 </resources>

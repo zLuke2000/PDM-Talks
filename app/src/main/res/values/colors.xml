@@ -8,4 +8,6 @@
     <color name="orange_dark">#FFFF8800</color>
     <color name="default_link">#FF1A0DAB</color>
     <color name="yellow_textarea">#33FFBB33</color>
+    <color name="default_primary_text">#FF000000</color>
+    <color name="default_secondary_text">#808080</color>
 </resources>

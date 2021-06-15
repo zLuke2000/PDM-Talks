@@ -48,6 +48,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="@string/nickname"
+                    android:textColor="@color/default_primary_text"
                     android:textSize="24sp" />
 
                 <TextView
@@ -57,6 +58,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="@string/real_name"
+                    android:textColor="@color/default_secondary_text"
                     android:textSize="24sp" />
 
                 <TextView
@@ -66,6 +68,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="@string/real_surname"
+                    android:textColor="@color/default_secondary_text"
                     android:textSize="24sp" />
             </LinearLayout>
         </LinearLayout>
