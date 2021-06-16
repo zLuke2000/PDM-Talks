@@ -1,26 +1,26 @@
 package it.uninsubria.adapter
 
-import android.graphics.BitmapFactory
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.storage.FileDownloadTask
 import it.uninsubria.firebase.Storage
-import it.uninsubria.talks.MainActivity
 import it.uninsubria.talks.R
 import it.uninsubria.talks.Talks
-import java.io.File
+
 
 /*
     RVTAdapert -> RecyclerView Talks Adapter
     TRHolder   -> Talk Row Holder
  */
 
-class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: OnTalkClickListener?) : RecyclerView.Adapter<RVTAdapter.TRHolder>() {
+class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: OnTalkClickListener?, private val parentWidth: Int) : RecyclerView.Adapter<RVTAdapter.TRHolder>() {
     private val TAG = "RVTAdapter"
     private val myStorage: Storage = Storage()
 
@@ -44,8 +44,8 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
             holder.linkSource.textSize = 14F
         }
         // aggiorno icona profilo
-        myStorage.downloadBitmap("AccountIcon/${currentTalk.nickname}.jpg") { resultBitmap ->
-            if(resultBitmap != null) {
+        myStorage.downloadBitmap("AccountIcon/${currentTalk.nickname}.jpg") { success, resultBitmap ->
+            if(success) {
                 holder.accountIcon.setImageBitmap(resultBitmap)
             } else {
                 holder.accountIcon.setImageResource(R.drawable.default_account_image)
@@ -53,9 +53,13 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
         }
 
         // aggiorno immagine Talk (se esistente)
-        myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { resultBitmap ->
-            if(resultBitmap != null) {
-                holder.talkImage.setImageBitmap(resultBitmap)
+        myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { success, resultBitmap ->
+            if(success) {
+                val factor = parentWidth / resultBitmap?.width?.toFloat()!!
+                val finalBitmap = Bitmap.createScaledBitmap(resultBitmap, parentWidth, (resultBitmap.height * factor).toInt(), true)
+                holder.talkImage.setImageBitmap(finalBitmap)
+            } else {
+                holder.talkImage.setImageDrawable(null)
             }
         }
     }

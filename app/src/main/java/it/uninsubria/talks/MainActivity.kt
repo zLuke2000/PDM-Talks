@@ -1,15 +1,20 @@
 package it.uninsubria.talks
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.WindowMetrics
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,12 +23,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
+import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
-import it.uninsubria.firebase.firestore.Database
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.security.AccessController.getContext
 
 
 class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
@@ -55,7 +61,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         UserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
         UserTalksRecyclerView.setHasFixedSize(true)
         talksArrayList = arrayListOf()
-        rvtAdapter = RVTAdapter(talksArrayList, this)
+        rvtAdapter = RVTAdapter(talksArrayList, this, Resources.getSystem().displayMetrics.widthPixels)
         UserTalksRecyclerView.adapter = rvtAdapter
 
         //Dark-Light Mode
@@ -94,10 +100,10 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     private fun eventChangeListener() {
         //DOWNLOAD DATA FROM FIRESTORE DB
         try {
-            myDB.getTalks() { value ->
+            myDB.getTalks { value ->
                 for (dc: DocumentChange in value?.documentChanges!!) {
                     if (dc.type == DocumentChange.Type.ADDED) {
-                        var currentTalk = dc.document.toObject(Talks::class.java)
+                        val currentTalk = dc.document.toObject(Talks::class.java)
                         currentTalk.imagePath = dc.document.id
                         talksArrayList.add(currentTalk)
                     }
@@ -168,33 +174,41 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
             val selectedImage: Uri? = data?.data
             // Ricerca nickaname associato all'utente corrente
 
-            myDB.getTaskForImage(myAuth.currentUser.email) { task ->
-                       if (task.isSuccessful) {
-                           for (document in task.result!!) {
-                               try {
-                                   val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
-                                   // Compressione
-                                   val baos = ByteArrayOutputStream()
-                                   bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                                   val imgData = baos.toByteArray()
-                                   // Upload
-                                   myStorage.uploadBitmap("AccountIcon/${document.data["nickname"]}.jpg", imgData) { result ->
-                                       if (result) {
-                                           Toast.makeText(baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
-                                       } else {
-                                           Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
-                                       }
-                                   }
-                               } catch (e: FileNotFoundException) {
-                                   Log.e(TAG, e.printStackTrace().toString())
-                               } catch (e: IOException) {
-                                   Log.e(TAG, e.printStackTrace().toString())
-                               }
-                           }
-                       } else {
-                           Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
-                       }
-                   }
+            myAuth.currentUser?.email?.let {
+                myDB.getTaskForImage(it) { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            try {
+                                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(
+                                    this.contentResolver,
+                                    selectedImage
+                                )
+                                // Compressione
+                                val baos = ByteArrayOutputStream()
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                                val imgData = baos.toByteArray()
+                                // Upload
+                                myStorage.uploadBitmap(
+                                    "AccountIcon/${document.data["nickname"]}.jpg",
+                                    imgData
+                                ) { result ->
+                                    if (result) {
+                                        Toast.makeText( baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            } catch (e: FileNotFoundException) {
+                                Log.e(TAG, e.printStackTrace().toString())
+                            } catch (e: IOException) {
+                                Log.e(TAG, e.printStackTrace().toString())
+                            }
+                        }
+                    } else {
+                        Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+                    }
+                }
+            }
         }
     }
 }

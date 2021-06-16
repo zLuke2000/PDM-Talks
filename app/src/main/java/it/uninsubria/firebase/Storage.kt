@@ -12,16 +12,16 @@ class Storage {
 
     var myStorage: FirebaseStorage = Firebase.storage
 
-    fun downloadBitmap(path: String, callback: (Bitmap?) -> Unit) {
+    fun downloadBitmap(path: String, callback: (Boolean, Bitmap?) -> Unit) {
         val bitmapRef = myStorage.reference.child(path)
         val localFile = File.createTempFile("tempImg", "jpg")
         val fdt: FileDownloadTask = bitmapRef.getFile(localFile)
         fdt.addOnSuccessListener {
             val filePath = localFile.path
             val bitmap = BitmapFactory.decodeFile(filePath)
-            callback(bitmap)
+            callback(true, bitmap)
         }.addOnFailureListener{
-            callback(null)
+            callback(false, null)
         }
     }
 

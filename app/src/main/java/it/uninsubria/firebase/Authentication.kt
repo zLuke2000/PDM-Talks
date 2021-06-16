@@ -1,4 +1,4 @@
-package it.uninsubria.firebase.firestore
+package it.uninsubria.firebase
 
 import android.app.Activity
 import android.util.Log

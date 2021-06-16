@@ -1,6 +1,6 @@
 package it.uninsubria.talks
 
-import android.graphics.BitmapFactory
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.*
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Storage
-import it.uninsubria.firebase.firestore.Database
+import it.uninsubria.firebase.Database
 import kotlinx.android.synthetic.main.activity_profilo.*
-import java.io.File
-
 
 class Profilo : AppCompatActivity() {
     private val TAG = "Activity_Profilo"
@@ -35,7 +33,7 @@ class Profilo : AppCompatActivity() {
         SingleUserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
         SingleUserTalksRecyclerView.setHasFixedSize(true)
         talksArrayList = arrayListOf()
-        rvtAdapter = RVTAdapter(talksArrayList, null)
+        rvtAdapter = RVTAdapter(talksArrayList, null, Resources.getSystem().displayMetrics.widthPixels)
         SingleUserTalksRecyclerView.adapter = rvtAdapter
     }
 
@@ -66,8 +64,8 @@ class Profilo : AppCompatActivity() {
         }
 
         // Imposta immagine profilo
-        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { resultBitmap ->
-            if (resultBitmap != null) {
+        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { success, resultBitmap ->
+            if (success) {
                 immagine_Profilo.setImageBitmap(resultBitmap)
             } else {
                 immagine_Profilo.setImageResource(R.drawable.default_account_image)

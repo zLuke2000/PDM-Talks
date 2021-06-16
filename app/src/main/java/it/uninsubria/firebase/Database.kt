@@ -1,9 +1,8 @@
-package it.uninsubria.firebase.firestore
+package it.uninsubria.firebase
 
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-
 
 class Database {
     private val TAG = "Database"

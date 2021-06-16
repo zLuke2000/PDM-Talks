@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -14,11 +13,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import it.uninsubria.firebase.firestore.Database
+import it.uninsubria.firebase.Database
+import it.uninsubria.firebase.Storage
 import kotlinx.android.synthetic.main.activity_crea_talk.*
 import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
 
 class CreaTalk : AppCompatActivity() {
     // Current activity TAG
@@ -28,7 +26,7 @@ class CreaTalk : AppCompatActivity() {
     // Firebase Authentication
     private lateinit var myAuth: FirebaseAuth
     // Firebase Storage
-    var storage: FirebaseStorage = Firebase.storage
+    private val myStorage: Storage = Storage()
     private val PICK_IMAGE_REQUEST = 1
     private lateinit var imgData: ByteArray
 
@@ -49,14 +47,18 @@ class CreaTalk : AppCompatActivity() {
         }
         when (testoTalk.length) {
             in 0..3 -> ET_testoTalk.error = getString(R.string.talkTooShort).replace("$", "4")
-            in 4..500 -> {myDB.addTalkToDB(myAuth.currentUser.email, testoTalk, linkSource) { success, uid ->
-                            if (success) {
-                                Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
-                                ET_testoTalk.setText("")
-                                ET_linkSource.setText("")
-                                uploadPicture(uid)
-                            }
-                        }}
+            in 4..500 -> {
+                myAuth.currentUser?.email?.let {
+                    myDB.addTalkToDB(it, testoTalk, linkSource) { success, uid ->
+                        if (success) {
+                            Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
+                            ET_testoTalk.setText("")
+                            ET_linkSource.setText("")
+                            uploadPicture(uid)
+                        }
+                    }
+                }
+            }
             else -> ET_testoTalk.error = getString(R.string.talkTooLong).replace("$", "500")
         }
     }
@@ -79,13 +81,6 @@ class CreaTalk : AppCompatActivity() {
     }
 
     private fun uploadPicture(talksID: String) {
-        val talksRef = storage.reference.child("TalksImage/${talksID}.jpg")
-        var uploadTask = talksRef.putBytes(imgData)
-        uploadTask.addOnFailureListener {
-            Toast.makeText(baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
-        }.addOnSuccessListener {
-            Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
-        }
+        myStorage.uploadBitmap("TalksImage/${talksID}.jpg", imgData) {}
     }
-
 }

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import it.uninsubria.firebase.firestore.Authentication
+import it.uninsubria.firebase.Authentication
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_registrazione.TF_EmailLogin
 

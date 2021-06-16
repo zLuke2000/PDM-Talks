@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import it.uninsubria.firebase.firestore.Database
+import it.uninsubria.firebase.Database
 import kotlinx.android.synthetic.main.activity_registrazione.*
 
 class Registrazione : AppCompatActivity() {
@@ -82,21 +82,21 @@ class Registrazione : AppCompatActivity() {
 
     // controllo email
     private fun checkEmail(email: String): Boolean {
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            return true
+        return if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            true
         } else {
             TF_EmailLogin.error = getString(R.string.invalidEmail)
-            return false
+            false
         }
     }
 
     // controllo password
     private fun checkPassword(pass: EditText, min: Int): Boolean {
-        if (pass.text.length < min) {
+        return if (pass.text.length < min) {
             pass.error = getString(R.string.minChar).replace("$", "" + min)
-            return false
+            false
         } else {
-            return true
+            true
         }
     }
 }
