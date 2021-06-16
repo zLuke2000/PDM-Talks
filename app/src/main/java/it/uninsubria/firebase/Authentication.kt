@@ -8,6 +8,7 @@ import com.google.firebase.ktx.Firebase
 
 class Authentication {
     private val TAG = "Authentication"
+
     private val auth: FirebaseAuth = Firebase.auth
 
     fun signInWithEmailAndPassword(act: Activity, email: String, password: String, callback: (Boolean) -> Unit) {

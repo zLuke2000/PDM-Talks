@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
+import it.uninsubria.talks.Profilo
 import it.uninsubria.talks.R
 import it.uninsubria.talks.Talks
 
@@ -20,9 +24,12 @@ import it.uninsubria.talks.Talks
     TRHolder   -> Talk Row Holder
  */
 
-class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: OnTalkClickListener?, private val parentWidth: Int) : RecyclerView.Adapter<RVTAdapter.TRHolder>() {
+class RVTAdapter(private val parentContext: Context, private val talksList: ArrayList<Talks>, private val listener: OnTalkClickListener?, private val parentWidth: Int, private val userEmail: String?) : RecyclerView.Adapter<RVTAdapter.TRHolder>() {
     private val TAG = "RVTAdapter"
+
     private val myStorage: Storage = Storage()
+    private val myDB: Database = Database()
+    private lateinit var myRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TRHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.row_talk, parent, false)
@@ -62,6 +69,19 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
                 holder.talkImage.setImageDrawable(null)
             }
         }
+
+        // abilita icona rimuovi talk (se l'utente corrente e' il proprietario)
+        myDB.getNicknameByEmail(userEmail) { result ->
+            if (currentTalk.nickname.equals(result)) {
+                holder.deleteTalkImage.isVisible = true
+                holder.deleteTalkImage.isClickable = true
+                holder.deleteTalkImage.setOnClickListener{ currentTalk.imagePath?.let { it1 -> deleteCurrentTalk(it1) } }
+            } else {
+                holder.deleteTalkImage.isVisible = false
+                holder.deleteTalkImage.isClickable = false
+                holder.deleteTalkImage.setOnClickListener {}
+            }
+        }
     }
 
     override fun getItemCount(): Int = talksList.size
@@ -72,6 +92,7 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
         val linkSource : TextView = itemView.findViewById(R.id.TV_linkSource)
         val accountIcon : ImageView = itemView.findViewById(R.id.IV_profile)
         val talkImage : ImageView = itemView.findViewById(R.id.IV_content)
+        val deleteTalkImage: ImageView = itemView.findViewById(R.id.IV_delete)
 
         init {
             itemView.setOnClickListener(this)
@@ -87,6 +108,20 @@ class RVTAdapter(private val talksList: ArrayList<Talks>, private val listener: 
 
     interface OnTalkClickListener {
         fun onTalkclick(position: Int) {
+        }
+
+    }
+
+    private fun deleteCurrentTalk(uid: String) {
+        Log.i(TAG, "DELETE: $uid")
+        myStorage.deleteBitmap("TalksImage/$uid.jpg")
+        myDB.deleteTalks(uid) { result ->
+            if(result) {
+                Toast.makeText(parentContext, R.string.talkDeletedOK, Toast.LENGTH_SHORT).show()
+                //@TODO autoReload
+            } else {
+                Toast.makeText(parentContext, R.string.talkDeletedKO, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

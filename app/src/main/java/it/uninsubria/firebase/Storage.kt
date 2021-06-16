@@ -10,7 +10,7 @@ import java.io.File
 
 class Storage {
 
-    var myStorage: FirebaseStorage = Firebase.storage
+    private var myStorage: FirebaseStorage = Firebase.storage
 
     fun downloadBitmap(path: String, callback: (Boolean, Bitmap?) -> Unit) {
         val bitmapRef = myStorage.reference.child(path)
@@ -32,5 +32,10 @@ class Storage {
         }.addOnFailureListener {
             callback(false)
         }
+    }
+
+    fun deleteBitmap(path: String) {
+        val bitmapRef = myStorage.reference.child(path)
+        bitmapRef.delete()
     }
 }

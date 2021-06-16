@@ -1,26 +1,22 @@
 package it.uninsubria.talks
 
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.view.WindowMetrics
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
@@ -29,46 +25,49 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.security.AccessController.getContext
 
 
 class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
-    // Current activity TAG
     private val TAG = "Main_Activity"
-    // Database
+
+    // Firebase
     private val myDB: Database = Database()
-    // Firebase Authentication
     private lateinit var myAuth: FirebaseAuth
-    // Firebase Storage
     private val myStorage: Storage = Storage()
     private val PICK_IMAGE_REQUEST = 1
-    // lista e adapter necessari per inizializzare la RecyclerView
+
+    // Lista e adapter necessari per inizializzare la RecyclerView
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
+
     // Variabili condivise (necessarie per mantenere la modalità notturna in caso di riavvio dell'app)
-    private var nightMode: Int = getDefaultNightMode();
+    private var nightMode: Int = getDefaultNightMode()
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
+
     // Menu popup per impostazioni
     private lateinit var settingsPopup: PopupMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Firebase - authentication
+
+        // Firebase - authentication
         myAuth = Firebase.auth
-        //Recycler View
+
+        // Recycler View
         setContentView(R.layout.activity_main)
         UserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
         UserTalksRecyclerView.setHasFixedSize(true)
         talksArrayList = arrayListOf()
-        rvtAdapter = RVTAdapter(talksArrayList, this, Resources.getSystem().displayMetrics.widthPixels)
+        rvtAdapter = RVTAdapter(baseContext, talksArrayList, this, Resources.getSystem().displayMetrics.widthPixels, "")
         UserTalksRecyclerView.adapter = rvtAdapter
 
-        //Dark-Light Mode
-        sharedPreferences = getSharedPreferences("SharedPrefs", MODE_PRIVATE);
+        // Dark-Light Mode
+        sharedPreferences = getSharedPreferences("SharedPrefs", MODE_PRIVATE)
         nightMode = sharedPreferences.getInt("NightModeIntStatus", MODE_NIGHT_NO)
         setDefaultNightMode(nightMode)
 
+        // PopUp menu
         settingsPopup = PopupMenu(this, settingsButton)
         settingsPopup.menuInflater.inflate(R.menu.popup_settings, settingsPopup.menu)
         if((nightMode == MODE_NIGHT_NO)) {
@@ -80,7 +79,8 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null)
+
+        // Controllo se l'utente e' gia' registrato
         val currentUser = myAuth.currentUser
         if(currentUser == null) {
             Log.i(TAG, "[MAIN] Passo alla schermata <Login>")
@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
             eventChangeListener()
         }
 
+        // Imposto listener per swipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener {
             talksArrayList.clear()
             eventChangeListener()
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     }
 
     private fun eventChangeListener() {
-        //DOWNLOAD DATA FROM FIRESTORE DB
+        // Scarico Talks da firestore
         try {
             myDB.getTalks { value ->
                 for (dc: DocumentChange in value?.documentChanges!!) {
@@ -141,14 +142,14 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     private fun switchUIMode() {
         if(nightMode == MODE_NIGHT_NO) {
             setDefaultNightMode(MODE_NIGHT_YES)
-            editor = sharedPreferences.edit();
-            editor.putInt("NightModeIntStatus", getDefaultNightMode());
-            editor.apply();
+            editor = sharedPreferences.edit()
+            editor.putInt("NightModeIntStatus", getDefaultNightMode())
+            editor.apply()
         } else {
             setDefaultNightMode(MODE_NIGHT_NO)
-            editor = sharedPreferences.edit();
-            editor.putInt("NightModeIntStatus", getDefaultNightMode());
-            editor.apply();
+            editor = sharedPreferences.edit()
+            editor.putInt("NightModeIntStatus", getDefaultNightMode())
+            editor.apply()
         }
     }
 

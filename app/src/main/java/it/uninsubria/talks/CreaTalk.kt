@@ -3,16 +3,14 @@ package it.uninsubria.talks
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
 import kotlinx.android.synthetic.main.activity_crea_talk.*
@@ -28,7 +26,7 @@ class CreaTalk : AppCompatActivity() {
     // Firebase Storage
     private val myStorage: Storage = Storage()
     private val PICK_IMAGE_REQUEST = 1
-    private lateinit var imgData: ByteArray
+    private var imgData: ByteArray? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +41,7 @@ class CreaTalk : AppCompatActivity() {
         if(linkSource.isEmpty()) {
             linkSource = ""
         } else if((!linkSource.startsWith("http://")) and (!linkSource.startsWith("https://"))) {
-            linkSource = "http://$linkSource";
+            linkSource = "http://$linkSource"
         }
         when (testoTalk.length) {
             in 0..3 -> ET_testoTalk.error = getString(R.string.talkTooShort).replace("$", "4")
@@ -72,7 +70,7 @@ class CreaTalk : AppCompatActivity() {
         //Detects request codes
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
             val selectedImage: Uri? = data?.data
-            var bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
+            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
             // Compressione
             val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -81,6 +79,8 @@ class CreaTalk : AppCompatActivity() {
     }
 
     private fun uploadPicture(talksID: String) {
-        myStorage.uploadBitmap("TalksImage/${talksID}.jpg", imgData) {}
+        if(imgData != null) {
+            myStorage.uploadBitmap("TalksImage/${talksID}.jpg", imgData!!) {}
+        }
     }
 }

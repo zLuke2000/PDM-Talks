@@ -1,20 +1,28 @@
 package it.uninsubria.talks
 
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
-import it.uninsubria.firebase.Storage
 import it.uninsubria.firebase.Database
+import it.uninsubria.firebase.Storage
 import kotlinx.android.synthetic.main.activity_profilo.*
 
 class Profilo : AppCompatActivity() {
     private val TAG = "Activity_Profilo"
+
     private val myDB: Database = Database()
+    private val myAuth: FirebaseAuth = Firebase.auth
     private val myStorage: Storage = Storage()
+
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
     private lateinit var nickname: String
@@ -33,7 +41,7 @@ class Profilo : AppCompatActivity() {
         SingleUserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
         SingleUserTalksRecyclerView.setHasFixedSize(true)
         talksArrayList = arrayListOf()
-        rvtAdapter = RVTAdapter(talksArrayList, null, Resources.getSystem().displayMetrics.widthPixels)
+        rvtAdapter = RVTAdapter(baseContext, talksArrayList, null, Resources.getSystem().displayMetrics.widthPixels, myAuth.currentUser?.email)
         SingleUserTalksRecyclerView.adapter = rvtAdapter
     }
 
@@ -78,7 +86,7 @@ class Profilo : AppCompatActivity() {
         myDB.getSingleUserTalks(nickname) { value ->
             for (dc: DocumentChange in value?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
-                    var currentTalk = dc.document.toObject(Talks::class.java)
+                    val currentTalk = dc.document.toObject(Talks::class.java)
                     currentTalk.imagePath = dc.document.id
                     talksArrayList.add(currentTalk)
                 }

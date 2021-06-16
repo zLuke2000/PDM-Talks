@@ -23,8 +23,9 @@ class Database {
 
     fun addTalkToDB (email: String, text: String, linkSource: String, callback: (Boolean, String) -> Unit) {
         val talk: MutableMap<String, Any> = HashMap()
+        Log.i(TAG, "--------------------------------------------------- aggiungo a DB: $email")
         getNicknameByEmail(email) { nicknameRes ->
-            if(nicknameRes != null) {
+            if(nicknameRes.isNotEmpty()) {
                 talk["nickname"] = nicknameRes
                 talk["content"] = text
                 talk["linkSource"] = linkSource
@@ -40,6 +41,7 @@ class Database {
                             Log.w(TAG, "[ERRORE] caricamento talk del DB", e)
                             callback(false, "")
                         }
+                talk.clear()
             } else {
                 Log.e(TAG, "nickname non trovato")
             }
@@ -47,7 +49,7 @@ class Database {
 
     }
 
-    fun getNicknameByEmail(emailValue: String?, callback: (String?) -> Unit) {
+    fun getNicknameByEmail(emailValue: String?, callback: (String) -> Unit) {
         db.collection("utenti")
                 .whereEqualTo("email", emailValue)
                 .get()
@@ -61,7 +63,7 @@ class Database {
                         }
                     }
                 }
-        callback(null)
+        callback("")
     }
 
     fun getTalks(callback: (QuerySnapshot?) -> Unit) {
@@ -107,9 +109,22 @@ class Database {
     }
 
     fun checkUniqueUser(nickname: String, callback: (Task<QuerySnapshot>) -> Unit) {
-        Database().db.collection("utenti")
+        db.collection("utenti")
                 .whereEqualTo("nickname", nickname)
                 .get()
                 .addOnCompleteListener { task -> callback(task) }
+    }
+
+    fun deleteTalks(talksUid: String, callback: (Boolean) -> Unit) {
+        db.collection("talks")
+                .document(talksUid)
+                .delete()
+                .addOnSuccessListener {
+                    Log.i(TAG, "$talksUid RIMOSSO")
+                    callback(true)
+                }.addOnFailureListener {
+                    Log.i(TAG, "$talksUid RIMOZIONE FALLITA")
+                    callback(false)
+                }
     }
 }

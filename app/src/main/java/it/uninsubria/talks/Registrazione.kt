@@ -23,7 +23,7 @@ class Registrazione : AppCompatActivity() {
         myAuth = FirebaseAuth.getInstance()
     }
 
-    fun checkRegistrazione(view: View) {
+    fun checkRegistrazione(v: View) {
         val name: String = TF_RealName.text.toString().trim()
         val surname: String = TF_RealSurname.text.toString().trim()
         val email: String = TF_EmailLogin.text.toString().trim()
@@ -43,7 +43,7 @@ class Registrazione : AppCompatActivity() {
                     }
                     if(!duplicato) {
                         myAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(this) { task ->
+                                .addOnCompleteListener(this) { resultTask ->
                                     if (task.isSuccessful) {
                                         // Sign in success
                                         Log.d(TAG, "[REG] createUserWithEmail:success")
@@ -52,7 +52,7 @@ class Registrazione : AppCompatActivity() {
                                         startActivity(Intent(this, MainActivity::class.java))
                                     } else {
                                         // If sign in fails
-                                        Log.w(TAG, "[REG] createUserWithEmail:failure", task.exception)
+                                        Log.w(TAG, "[REG] createUserWithEmail:failure", resultTask.exception)
                                         Toast.makeText(baseContext, R.string.SignInKO, Toast.LENGTH_SHORT).show()
                                     }
                                 }

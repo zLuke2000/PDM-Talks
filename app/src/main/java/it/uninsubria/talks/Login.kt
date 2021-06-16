@@ -38,11 +38,11 @@ class Login : AppCompatActivity() {
 
     // controllo email
     private fun checkEmail(email: String): Boolean {
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            return true
+        return if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            true
         } else {
             TF_EmailLogin.error = getString(R.string.invalidEmail)
-            return false
+            false
         }
     }
 
@@ -56,7 +56,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    fun registraNuovoCliente(view: View) {
+    fun registraNuovoCliente(v: View) {
         Log.i(TAG, "[LOGIN] Passo alla schermata <Registrazione>")
         startActivity(Intent(this, Registrazione::class.java))
     }

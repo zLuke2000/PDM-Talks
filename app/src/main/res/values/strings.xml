@@ -31,6 +31,8 @@
     <string name="SignInKO">Unable to register user</string>
     <string name="ImageUpdated">Account picture successfully updated</string>
     <string name="ImageNotUpdated">Unable to update account picture</string>
+    <string name="talkDeletedOK">Talk successfully removed</string>
+    <string name="talkDeletedKO">Unable to remove selected Talk</string>
 
     <!-- Stringhr Popup -->
     <string name="switchToNight">Switch to Night Mode</string>
