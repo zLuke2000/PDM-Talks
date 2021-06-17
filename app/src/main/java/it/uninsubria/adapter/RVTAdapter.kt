@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
-import it.uninsubria.talks.Profilo
 import it.uninsubria.talks.R
-import it.uninsubria.talks.Talks
+import it.uninsubria.models.Talks
 
 
 /*
@@ -29,7 +28,6 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
 
     private val myStorage: Storage = Storage()
     private val myDB: Database = Database()
-    private lateinit var myRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TRHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.row_talk, parent, false)

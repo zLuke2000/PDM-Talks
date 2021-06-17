@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Toast
 import it.uninsubria.firebase.Authentication
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_registrazione.TF_EmailLogin
 
 class Login : AppCompatActivity() {
     // Current activity TAG

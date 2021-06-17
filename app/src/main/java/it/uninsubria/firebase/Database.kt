@@ -3,6 +3,10 @@ package it.uninsubria.firebase
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import it.uninsubria.models.User
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class Database {
     private val TAG = "Database"
@@ -17,7 +21,7 @@ class Database {
 
         db.collection("utenti")
             .add(utente)
-            .addOnSuccessListener { documentReference -> Log.d(TAG, "DocumentSnapshot Utente aggiunto con ID: " + documentReference.id) }
+            .addOnSuccessListener { docRef -> Log.d(TAG, "DocumentSnapshot Utente aggiunto con ID: " + docRef.id) }
             .addOnFailureListener { e -> Log.w(TAG, "[ERRORE] caricamento utente del DB", e) }
     }
 
@@ -33,9 +37,9 @@ class Database {
 
                 db.collection("talks")
                         .add(talk)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot Talk aggiunto con ID: " + documentReference.id)
-                            callback(true, documentReference.id)
+                        .addOnSuccessListener { docRef ->
+                            Log.d(TAG, "DocumentSnapshot Talk aggiunto con ID: " + docRef.id)
+                            callback(true, docRef.id)
                         }
                         .addOnFailureListener { e ->
                             Log.w(TAG, "[ERRORE] caricamento talk del DB", e)
@@ -55,10 +59,10 @@ class Database {
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
-                            if (document.data["email"]?.equals(emailValue)!!) {
-                                callback(document.data["nickname"] as String)
+                        for (doc in task.result!!) {
+                            Log.d(TAG, doc.id + " => " + doc.data)
+                            if (doc.data["email"]?.equals(emailValue)!!) {
+                                callback(doc.data["nickname"] as String)
                             }
                         }
                     }
@@ -125,6 +129,27 @@ class Database {
                 }.addOnFailureListener {
                     Log.i(TAG, "$talksUid RIMOZIONE FALLITA")
                     callback(false)
+                }
+    }
+
+    fun getSimilarProfile(userToFind: String, callback: (ArrayList<User>?) -> Unit) {
+        var matchUserList: ArrayList<User>
+        db.collection("utenti")
+                .orderBy("nickname", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener { task ->
+                    matchUserList = arrayListOf()
+                    for (doc in task) {
+                        if((doc.data["nickname"].toString().toLowerCase(Locale.ROOT)).contains(userToFind.toLowerCase(Locale.ROOT)) or userToFind.isEmpty()) {
+                            matchUserList.add(User(doc.data["nickname"] as String, doc.data["nome"] as String, doc.data["cognome"] as String))
+                        }
+                    }
+                    for(u: User in matchUserList) {
+                        Log.i(TAG, "--------------------------------------------> ${u.nickname}")
+                    }
+                    callback(matchUserList)
+                }.addOnFailureListener {
+                    callback(null)
                 }
     }
 }

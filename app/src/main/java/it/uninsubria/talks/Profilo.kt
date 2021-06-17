@@ -1,10 +1,8 @@
 package it.uninsubria.talks
 
-import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
+import it.uninsubria.models.Talks
 import kotlinx.android.synthetic.main.activity_profilo.*
 
 class Profilo : AppCompatActivity() {

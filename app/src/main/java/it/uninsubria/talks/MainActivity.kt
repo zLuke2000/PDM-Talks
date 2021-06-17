@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
+import it.uninsubria.models.Talks
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         setContentView(R.layout.activity_main)
         UserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
         UserTalksRecyclerView.setHasFixedSize(true)
+
         talksArrayList = arrayListOf()
         rvtAdapter = RVTAdapter(baseContext, talksArrayList, this, Resources.getSystem().displayMetrics.widthPixels, "")
         UserTalksRecyclerView.adapter = rvtAdapter
@@ -68,7 +70,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         setDefaultNightMode(nightMode)
 
         // PopUp menu
-        settingsPopup = PopupMenu(this, settingsButton)
+        settingsPopup = PopupMenu(this, IB_settingsButton)
         settingsPopup.menuInflater.inflate(R.menu.popup_settings, settingsPopup.menu)
         if((nightMode == MODE_NIGHT_NO)) {
             settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToNight)
@@ -159,14 +161,22 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         startActivity(Intent(this, Login::class.java))
     }
 
+    fun findProfile(v: View) {
+        val intent = Intent(this, ListaProfili::class.java)
+        intent.putExtra("NICKNAME", TF_cercaProfilo.text.toString().trim())
+        startActivity(intent)
+    }
+
     fun newPost(v: View) {
         startActivity(Intent(this, CreaTalk::class.java))
     }
 
+    // Richiesta immagine dalla galleria
     private fun uploadPicture() {
         startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_REQUEST)
     }
 
+    // Ricezione e gestione dell'immagine dalla galleria
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
