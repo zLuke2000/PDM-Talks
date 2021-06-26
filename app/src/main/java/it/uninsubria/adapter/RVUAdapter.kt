@@ -1,6 +1,5 @@
 package it.uninsubria.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,8 @@ import it.uninsubria.talks.R
 import it.uninsubria.models.User
 
 /*
-    RVUAdapert -> RecyclerView User Adapter
-    TRHolder   -> Talk Row Holder
+ *  RVUAdapter -> RecyclerView User Adapter
+ *  TRHolder   -> Talk Row Holder
  */
 
 class RVUAdapter(private val usersList: ArrayList<User>, private val listener: OnTalkClickListener?) : RecyclerView.Adapter<RVUAdapter.TRHolder>() {
@@ -33,10 +32,9 @@ class RVUAdapter(private val usersList: ArrayList<User>, private val listener: O
         holder.nickname.text = currentUser.nickname
         // aggiorno nome e cognome
         holder.content.text = (currentUser.surname + currentUser.name)
-
         // aggiorno icona profilo
-        myStorage.downloadBitmap("AccountIcon/${currentUser.nickname}.jpg") { success, resultBitmap ->
-            if(success) {
+        myStorage.downloadBitmap("AccountIcon/${currentUser.nickname}.jpg") { resultBitmap ->
+            if(resultBitmap != null) {
                 holder.accountIcon.setImageBitmap(resultBitmap)
             } else {
                 holder.accountIcon.setImageResource(R.drawable.default_account_image)
@@ -58,13 +56,13 @@ class RVUAdapter(private val usersList: ArrayList<User>, private val listener: O
         override fun onClick(v: View?) {
             val position: Int = adapterPosition
             if(position != RecyclerView.NO_POSITION) {
-                listener?.onTalkclick(position)
+                listener?.talkClick(position)
             }
         }
     }
 
     interface OnTalkClickListener {
-        fun onTalkclick(position: Int) {
+        fun talkClick(position: Int) {
         }
     }
 }

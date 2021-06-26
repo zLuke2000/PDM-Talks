@@ -3,8 +3,12 @@ package it.uninsubria.talks
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
@@ -13,8 +17,10 @@ import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
 import it.uninsubria.models.Talks
-import kotlinx.android.synthetic.main.activity_profilo.*
 
+/*
+    SUTRV -> Single User Talks Recycler View
+ */
 class Profilo : AppCompatActivity() {
     private val TAG = "Activity_Profilo"
 
@@ -26,22 +32,39 @@ class Profilo : AppCompatActivity() {
     private lateinit var rvtAdapter: RVTAdapter
     private lateinit var nickname: String
 
+    // raw view declaration
+    private lateinit var tvNicknameProfilo: TextView
+    private lateinit var mySUTRV: RecyclerView
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var tvNomeProfilo: TextView
+    private lateinit var tvCognomeProfilo: TextView
+    private lateinit var ivProfileIcon: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         nickname = intent.getStringExtra("NICKNAME").toString()
 
         // Carica il layout
         setContentView(R.layout.activity_profilo)
+
+        // raw view link
+        tvNicknameProfilo = findViewById(R.id.TV_NicknameProfilo)
+        mySUTRV = findViewById(R.id.SingleUserTalksRecyclerView)
+        refreshLayout = findViewById(R.id.swipeRefreshLayoutProfilo)
+        tvNomeProfilo = findViewById(R.id.TV_NomeProfilo)
+        tvCognomeProfilo = findViewById(R.id.TV_CognomeProfilo)
+        ivProfileIcon = findViewById(R.id.IV_ProfileIcon)
+
         // Imposta il nickanme
-        TV_NicknameProfilo.text = nickname
+        tvNicknameProfilo.text = nickname
         // Compila gli altri campi (Nome, Cognome, Immagine profilo)
         getUserData()
 
-        SingleUserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
-        SingleUserTalksRecyclerView.setHasFixedSize(true)
+        mySUTRV.layoutManager = LinearLayoutManager(this)
+        mySUTRV.setHasFixedSize(true)
         talksArrayList = arrayListOf()
         rvtAdapter = RVTAdapter(baseContext, talksArrayList, null, Resources.getSystem().displayMetrics.widthPixels, myAuth.currentUser?.email)
-        SingleUserTalksRecyclerView.adapter = rvtAdapter
+        mySUTRV.adapter = rvtAdapter
     }
 
     public override fun onStart() {
@@ -49,10 +72,10 @@ class Profilo : AppCompatActivity() {
         talksArrayList.clear()
         eventChangeListener()
 
-        swipeRefreshLayout_Profilo.setOnRefreshListener {
+        refreshLayout.setOnRefreshListener {
             talksArrayList.clear()
             eventChangeListener()
-            swipeRefreshLayout_Profilo.isRefreshing = false
+            refreshLayout.isRefreshing = false
         }
     }
 
@@ -62,8 +85,8 @@ class Profilo : AppCompatActivity() {
         myDB.getUser(nickname) { task ->
             if (task.isSuccessful) {
                 for (document in task.result!!) {
-                    TV_NomeProfilo.text = document.data["nome"].toString()
-                    TV_CognomeProfilo.text = document.data["cognome"].toString()
+                    tvNomeProfilo.text = document.data["nome"].toString()
+                    tvCognomeProfilo.text = document.data["cognome"].toString()
                 }
             } else {
                 Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
@@ -71,11 +94,11 @@ class Profilo : AppCompatActivity() {
         }
 
         // Imposta immagine profilo
-        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { success, resultBitmap ->
-            if (success) {
-                immagine_Profilo.setImageBitmap(resultBitmap)
+        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { resultBitmap ->
+            if (resultBitmap != null) {
+                ivProfileIcon.setImageBitmap(resultBitmap)
             } else {
-                immagine_Profilo.setImageResource(R.drawable.default_account_image)
+                ivProfileIcon.setImageResource(R.drawable.default_account_image)
             }
         }
     }

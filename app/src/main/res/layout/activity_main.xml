@@ -28,7 +28,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="search user"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/IV_findProfile"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -39,6 +38,8 @@
                     android:id="@+id/TF_cercaProfilo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/search_user_hint"
+                    android:maxLines="1"
                     android:textAlignment="center" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -53,7 +54,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/TIL_cercaProfilo"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_search" />
+                app:srcCompat="@android:drawable/ic_menu_search"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/IB_settingsButton"

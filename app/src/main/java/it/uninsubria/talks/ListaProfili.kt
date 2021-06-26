@@ -2,13 +2,16 @@ package it.uninsubria.talks
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.uninsubria.adapter.RVUAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.models.User
-import kotlinx.android.synthetic.main.activity_lista_profili.*
+
+/*
+    lurv -> List User Recycler View
+ */
 
 class ListaProfili : AppCompatActivity(), RVUAdapter.OnTalkClickListener {
     private val TAG = "Activity_ListaProfili"
@@ -20,26 +23,29 @@ class ListaProfili : AppCompatActivity(), RVUAdapter.OnTalkClickListener {
     private lateinit var usersArrayList: ArrayList<User>
     private lateinit var rvuAdapter: RVUAdapter
 
+    // raw view declaration
+    private lateinit var myLURV: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userToFind = intent.getStringExtra("NICKNAME").toString()
+        // Carico il layout
         setContentView(R.layout.activity_lista_profili)
+        // raw view link
+        myLURV = findViewById(R.id.ListUserRecyclerView)
 
         myDB.getSimilarProfile(userToFind) { result ->
             if(result != null) {
-                ListUserRecyclerView.layoutManager = LinearLayoutManager(this)
-                ListUserRecyclerView.setHasFixedSize(true)
+                myLURV.layoutManager = LinearLayoutManager(this)
+                myLURV.setHasFixedSize(true)
                 usersArrayList = result
-                for(user: User in usersArrayList) {
-                    Log.i(TAG, "----------------> ${user.nickname}")
-                }
                 rvuAdapter = RVUAdapter(usersArrayList, this)
-                ListUserRecyclerView.adapter = rvuAdapter
+                myLURV.adapter = rvuAdapter
             }
         }
     }
 
-    override fun onTalkclick(position: Int) {
+    override fun talkClick(position: Int) {
         val intent = Intent(this, Profilo::class.java)
         intent.putExtra("NICKNAME", usersArrayList[position].nickname)
         startActivity(intent)

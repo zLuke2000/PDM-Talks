@@ -9,11 +9,15 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
@@ -22,11 +26,13 @@ import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
 import it.uninsubria.models.Talks
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+/*
+    UTRV -> User Talks Recycler View
+ */
 
 class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     private val TAG = "Main_Activity"
@@ -49,20 +55,33 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     // Menu popup per impostazioni
     private lateinit var settingsPopup: PopupMenu
 
+    // raw view declaration
+    private lateinit var myUTRV: RecyclerView
+    private lateinit var settingBtn: ImageButton
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var tfCercaProfilo: TextInputEditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Firebase - authentication
         myAuth = Firebase.auth
 
-        // Recycler View
+        // Carica il layout
         setContentView(R.layout.activity_main)
-        UserTalksRecyclerView.layoutManager = LinearLayoutManager(this)
-        UserTalksRecyclerView.setHasFixedSize(true)
+
+        // raw view link
+        myUTRV = findViewById(R.id.UserTalksRecyclerView)
+        settingBtn = findViewById(R.id.IB_settingsButton)
+        refreshLayout = findViewById(R.id.swipeRefreshLayout)
+        tfCercaProfilo = findViewById(R.id.TF_cercaProfilo)
+
+        myUTRV.layoutManager = LinearLayoutManager(this)
+        myUTRV.setHasFixedSize(true)
 
         talksArrayList = arrayListOf()
         rvtAdapter = RVTAdapter(baseContext, talksArrayList, this, Resources.getSystem().displayMetrics.widthPixels, "")
-        UserTalksRecyclerView.adapter = rvtAdapter
+        myUTRV.adapter = rvtAdapter
 
         // Dark-Light Mode
         sharedPreferences = getSharedPreferences("SharedPrefs", MODE_PRIVATE)
@@ -70,7 +89,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         setDefaultNightMode(nightMode)
 
         // PopUp menu
-        settingsPopup = PopupMenu(this, IB_settingsButton)
+        settingsPopup = PopupMenu(this, settingBtn)
         settingsPopup.menuInflater.inflate(R.menu.popup_settings, settingsPopup.menu)
         if((nightMode == MODE_NIGHT_NO)) {
             settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToNight)
@@ -93,10 +112,10 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         }
 
         // Imposto listener per swipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener {
+        refreshLayout.setOnRefreshListener {
             talksArrayList.clear()
             eventChangeListener()
-            swipeRefreshLayout.isRefreshing = false
+            refreshLayout.isRefreshing = false
         }
     }
 
@@ -116,15 +135,15 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         } catch (e: IndexOutOfBoundsException) {
             Log.e(TAG, e.printStackTrace().toString())
         }
-
     }
-    override fun onTalkclick(position: Int) {
+
+    override fun talkClick(position: Int) {
         val intent = Intent(this, Profilo::class.java)
         intent.putExtra("NICKNAME", talksArrayList[position].nickname)
         startActivity(intent)
     }
 
-    fun openSettings(v: View) {
+    fun openSettings(@Suppress("UNUSED_PARAMETER") v: View) {
         if(nightMode == MODE_NIGHT_NO) {
             settingsPopup.menu.findItem(R.id.nightModeButton).setTitle(R.string.switchToNight)
         } else {
@@ -161,13 +180,13 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         startActivity(Intent(this, Login::class.java))
     }
 
-    fun findProfile(v: View) {
+    fun findProfile(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, ListaProfili::class.java)
-        intent.putExtra("NICKNAME", TF_cercaProfilo.text.toString().trim())
+        intent.putExtra("NICKNAME", tfCercaProfilo.text.toString().trim())
         startActivity(intent)
     }
 
-    fun newPost(v: View) {
+    fun newPost(@Suppress("UNUSED_PARAMETER") v: View) {
         startActivity(Intent(this, CreaTalk::class.java))
     }
 

@@ -27,7 +27,6 @@ class Database {
 
     fun addTalkToDB (email: String, text: String, linkSource: String, callback: (Boolean, String) -> Unit) {
         val talk: MutableMap<String, Any> = HashMap()
-        Log.i(TAG, "--------------------------------------------------- aggiungo a DB: $email")
         getNicknameByEmail(email) { nicknameRes ->
             if(nicknameRes.isNotEmpty()) {
                 talk["nickname"] = nicknameRes
@@ -143,9 +142,6 @@ class Database {
                         if((doc.data["nickname"].toString().toLowerCase(Locale.ROOT)).contains(userToFind.toLowerCase(Locale.ROOT)) or userToFind.isEmpty()) {
                             matchUserList.add(User(doc.data["nickname"] as String, doc.data["nome"] as String, doc.data["cognome"] as String))
                         }
-                    }
-                    for(u: User in matchUserList) {
-                        Log.i(TAG, "--------------------------------------------> ${u.nickname}")
                     }
                     callback(matchUserList)
                 }.addOnFailureListener {

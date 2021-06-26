@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
 import it.uninsubria.talks.R
@@ -19,7 +18,7 @@ import it.uninsubria.models.Talks
 
 
 /*
-    RVTAdapert -> RecyclerView Talks Adapter
+    RVTAdapter -> RecyclerView Talks Adapter
     TRHolder   -> Talk Row Holder
  */
 
@@ -49,8 +48,8 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
             holder.linkSource.textSize = 14F
         }
         // aggiorno icona profilo
-        myStorage.downloadBitmap("AccountIcon/${currentTalk.nickname}.jpg") { success, resultBitmap ->
-            if(success) {
+        myStorage.downloadBitmap("AccountIcon/${currentTalk.nickname}.jpg") { resultBitmap ->
+            if(resultBitmap != null) {
                 holder.accountIcon.setImageBitmap(resultBitmap)
             } else {
                 holder.accountIcon.setImageResource(R.drawable.default_account_image)
@@ -58,9 +57,9 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
         }
 
         // aggiorno immagine Talk (se esistente)
-        myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { success, resultBitmap ->
-            if(success) {
-                val factor = parentWidth / resultBitmap?.width?.toFloat()!!
+        myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { resultBitmap ->
+            if(resultBitmap != null) {
+                val factor = parentWidth / resultBitmap.width.toFloat()
                 val finalBitmap = Bitmap.createScaledBitmap(resultBitmap, parentWidth, (resultBitmap.height * factor).toInt(), true)
                 holder.talkImage.setImageBitmap(finalBitmap)
             } else {
@@ -99,13 +98,13 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
         override fun onClick(v: View?) {
             val position: Int = adapterPosition
             if(position != RecyclerView.NO_POSITION) {
-                listener?.onTalkclick(position)
+                listener?.talkClick(position)
             }
         }
     }
 
     interface OnTalkClickListener {
-        fun onTalkclick(position: Int) {
+        fun talkClick(position: Int) {
         }
 
     }
@@ -116,7 +115,7 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
         myDB.deleteTalks(uid) { result ->
             if(result) {
                 Toast.makeText(parentContext, R.string.talkDeletedOK, Toast.LENGTH_SHORT).show()
-                //@TODO autoReload
+                this.notifyDataSetChanged()
             } else {
                 Toast.makeText(parentContext, R.string.talkDeletedKO, Toast.LENGTH_SHORT).show()
             }

@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import it.uninsubria.firebase.Database
-import kotlinx.android.synthetic.main.activity_registrazione.*
 
 class Registrazione : AppCompatActivity() {
     private val TAG = "Activity_Registrazione"
@@ -18,22 +17,47 @@ class Registrazione : AppCompatActivity() {
     private val myDB: Database = Database()
     private lateinit var myAuth: FirebaseAuth
 
+    // raw view declaration
+    private lateinit var tfRealName: TextInputEditText
+    private lateinit var tfRealSurname: TextInputEditText
+    private lateinit var tfEmail: TextInputEditText
+    private lateinit var tfpassword: TextInputEditText
+    private lateinit var tfNickname: TextInputEditText
+    private lateinit var tilRealname: TextInputLayout
+    private lateinit var tilRealSurname: TextInputLayout
+    private lateinit var tilEmail: TextInputLayout
+    private lateinit var tilPassword: TextInputLayout
+    private lateinit var tilNickname: TextInputLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrazione)
+
+        // raw view link
+        tfRealName = findViewById(R.id.TF_RealNameReg)
+        tfRealSurname = findViewById(R.id.TF_RealSurnameReg)
+        tfEmail = findViewById(R.id.TF_EmailReg)
+        tfpassword = findViewById(R.id.TF_PasswordReg)
+        tfNickname = findViewById(R.id.TF_NicknameReg)
+        tilRealname = findViewById(R.id.TIL_RealNameReg)
+        tilRealSurname = findViewById(R.id.TIL_RealSurnameReg)
+        tilEmail = findViewById(R.id.TIL_EmailReg)
+        tilPassword = findViewById(R.id.TIL_PasswordReg)
+        tilNickname = findViewById(R.id.TIL_NicknameReg)
+
         //Firebase - authentication
         myAuth = FirebaseAuth.getInstance()
     }
 
-    fun checkValueReg(v: View) {
-        val name: String = TF_RealNameReg.text.toString().trim()
-        val surname: String = TF_RealSurnameReg.text.toString().trim()
-        val email: String = TF_EmailReg.text.toString().trim()
-        val password: String = TF_PasswordReg.text.toString().trim()
-        val nickname: String = TF_NicknameReg.text.toString().trim()
+    fun checkValueReg(@Suppress("UNUSED_PARAMETER") v: View) {
+        val name: String = tfRealName.text.toString().trim()
+        val surname: String = tfRealSurname.text.toString().trim()
+        val email: String = tfEmail.text.toString().trim()
+        val password: String = tfpassword.text.toString().trim()
+        val nickname: String = tfNickname.text.toString().trim()
         var duplicato = false
 
-        if (checkName(TIL_RealNameReg, name, 2, 16) and checkName(TIL_RealSurnameReg, surname, 3, 16) and checkEmail(TIL_EmailReg, email) and checkPassword(TIL_PasswordReg, password, 6) and checkName(TIL_NicknameReg, nickname, 4, 30)) {
+        if (checkName(tilRealname, name, 2, 16) and checkName(tilRealSurname, surname, 3, 16) and checkEmail(tilEmail, email) and checkPassword(tilPassword, password, 6) and checkName(tilNickname, nickname, 4, 30)) {
             Log.i(TAG, "Controllo OK")
             //Controllo nickname unico
             myDB.checkUniqueUser(nickname) { task ->

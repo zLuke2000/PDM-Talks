@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -13,7 +14,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
-import kotlinx.android.synthetic.main.activity_crea_talk.*
 import java.io.ByteArrayOutputStream
 
 class CreaTalk : AppCompatActivity() {
@@ -27,16 +27,25 @@ class CreaTalk : AppCompatActivity() {
     private val myStorage: Storage = Storage()
     private val PICK_IMAGE_REQUEST = 1
     private var imgData: ByteArray? = null
+    // raw view declaration
+    private lateinit var etTalkText: TextView
+    private lateinit var etLinkSource: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Carico il layout
         setContentView(R.layout.activity_crea_talk)
+        // raw view link
+        etTalkText = findViewById(R.id.ET_testoTalk)
+        etLinkSource = findViewById(R.id.ET_linkSource)
         myAuth = Firebase.auth
     }
 
-    fun createNewTalk(v: View) {
-        val testoTalk: String = ET_testoTalk.text.toString().trim()
-        var linkSource: String = ET_linkSource.text.toString().trim()
+    fun createNewTalk(@Suppress("UNUSED_PARAMETER") v: View) {
+
+        // valori View
+        val testoTalk: String = etTalkText.text.toString().trim()
+        var linkSource: String = etLinkSource.text.toString().trim()
 
         if(linkSource.isEmpty()) {
             linkSource = ""
@@ -44,24 +53,24 @@ class CreaTalk : AppCompatActivity() {
             linkSource = "http://$linkSource"
         }
         when (testoTalk.length) {
-            in 0..3 -> ET_testoTalk.error = getString(R.string.talkTooShort).replace("$", "4")
+            in 0..3 -> etTalkText.error = getString(R.string.talkTooShort).replace("$", "4")
             in 4..500 -> {
                 myAuth.currentUser?.email?.let {
                     myDB.addTalkToDB(it, testoTalk, linkSource) { success, uid ->
                         if (success) {
                             Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
-                            ET_testoTalk.setText("")
-                            ET_linkSource.setText("")
+                            etTalkText.text = ""
+                            etTalkText.text = ""
                             uploadPicture(uid)
                         }
                     }
                 }
             }
-            else -> ET_testoTalk.error = getString(R.string.talkTooLong).replace("$", "500")
+            else -> etTalkText.error = getString(R.string.talkTooLong).replace("$", "500")
         }
     }
 
-    fun getPicture(view: View) {
+    fun getPicture(@Suppress("UNUSED_PARAMETER") v: View) {
         startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_REQUEST)
     }
 
