@@ -136,7 +136,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_style_orange"
         android:onClick="checkValueReg"
-        android:text="@string/signin"
+        android:text="@string/sign_in"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

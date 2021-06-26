@@ -48,12 +48,11 @@
     <android.widget.Button
         android:id="@+id/b_login"
         style="@style/Widget.MaterialComponents.Button"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_style_orange"
         android:onClick="loginUtente"
-        android:text="@string/login"
+        android:text="@string/log_in"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
