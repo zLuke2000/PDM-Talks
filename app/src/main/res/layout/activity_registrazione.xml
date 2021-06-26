@@ -26,6 +26,7 @@
     <!-- TEXT FIELD NAME -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TIL_RealNameReg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/real_name"
@@ -38,15 +39,16 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_RealNameReg"
-            android:inputType="textPersonName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- TEXT FIELD SURNAME -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TIL_RealSurnameReg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/real_surname"
@@ -59,15 +61,17 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_RealSurnameReg"
-            android:inputType="textPersonName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- TEXT FIELD EMAIL -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TIL_EmailReg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email_address"
@@ -89,6 +93,7 @@
     <!-- TEXT FIELD PASSWORD -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TIL_PasswordReg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password"
@@ -111,6 +116,7 @@
     <!-- TEXT FIELD NICKNAME -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TIL_NicknameReg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/nickname"
@@ -132,6 +138,7 @@
     <!-- SUBMIT BUTTON -->
     <Button
         android:id="@+id/B_SubmitReg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_style_orange"
