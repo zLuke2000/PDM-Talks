@@ -103,7 +103,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TIL_EmailReg">
+        app:layout_constraintTop_toBottomOf="@+id/TIL_EmailReg"
+        app:helperTextEnabled="true"
+        app:helperText="@string/password_requirement">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_PasswordReg"

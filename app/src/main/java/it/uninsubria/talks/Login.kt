@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputLayout
 import it.uninsubria.firebase.Authentication
 
 class Login : AppCompatActivity() {
@@ -16,8 +17,9 @@ class Login : AppCompatActivity() {
 
     // raw view declaration
     private lateinit var tfPassword: TextView
+    private lateinit var tilPassword: TextInputLayout
     private lateinit var tfEmail: TextView
-
+    private lateinit var tilEmail: TextInputLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +27,9 @@ class Login : AppCompatActivity() {
 
         // raw view link
         tfPassword = findViewById(R.id.TF_PasswordLogin)
+        tilPassword = findViewById(R.id.TIL_PasswordLogin)
         tfEmail = findViewById(R.id.TF_EmailLogin)
+        tilEmail = findViewById(R.id.TIL_EmailLogin)
     }
 
     fun loginUtente(@Suppress("UNUSED_PARAMETER") v: View) {
@@ -47,19 +51,22 @@ class Login : AppCompatActivity() {
     // controllo email
     private fun checkEmail(email: String): Boolean {
         return if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            tilEmail.error = null
             true
         } else {
-            tfEmail.error = getString(R.string.invalidEmail)
+            tilEmail.error = getString(R.string.invalidEmail)
             false
         }
     }
 
     // controllo password
     private fun checkPassword(pass: String, min: Int): Boolean {
+        Log.i(TAG, pass);
         return if (pass.length < min) {
-            tfPassword.error = getString(R.string.minChar).replace("$", "" + min)
+            tilPassword.error = getString(R.string.minChar).replace("$", "" + min)
             false
         } else {
+            tilPassword.error = null
             true
         }
     }

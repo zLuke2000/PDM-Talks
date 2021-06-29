@@ -14,18 +14,18 @@
         android:text="@string/new_post"
         android:textColor="@color/orange_light"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/ET_testoTalk"
+        app:layout_constraintBottom_toTopOf="@+id/TIL_testoTalk"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/ET_testoTalk"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TIL_testoTalk"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:autofillHints=""
-        android:background="@drawable/textbox_style"
         android:hint="@string/talk_hint"
         android:inputType="textLongMessage|textMultiLine"
         android:textAlignment="center"
@@ -34,7 +34,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TV_newPost" />
+        app:layout_constraintTop_toBottomOf="@+id/TV_newPost"
+        app:errorEnabled="true"
+        app:counterEnabled="true"
+        app:counterMaxLength="500">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/ET_testoTalk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="10"
+        />
+
+</com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout3"
@@ -44,15 +56,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ET_testoTalk">
+        app:layout_constraintTop_toBottomOf="@+id/TIL_testoTalk">
 
-        <EditText
-            android:id="@+id/ET_linkSource"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TIL_linkSource"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:autofillHints=""
-            android:background="@drawable/textbox_style"
             android:hint="@string/link_hint"
             android:inputType="textLongMessage"
             android:textAlignment="center"
@@ -60,8 +72,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:errorEnabled="true"
+            >
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ET_linkSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="10"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"

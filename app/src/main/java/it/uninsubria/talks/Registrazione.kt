@@ -121,10 +121,12 @@ class Registrazione : AppCompatActivity() {
     // controllo password
     private fun checkPassword(til: TextInputLayout, passText: String, min: Int): Boolean {
         return if (passText.length < min) {
+            til.isHelperTextEnabled = false
             til.error = getString(R.string.minChar).replace("$", "" + min)
             false
         } else {
             til.error = null
+            til.isHelperTextEnabled = true
             true
         }
     }

@@ -7,9 +7,9 @@
     <string name="real_name">Name</string>
     <string name="real_surname">Surname</string>
     <string name="email_address">E-mail address</string>
-    <string name="password">Password (min 6 characters)</string>
+    <string name="password_requirement">minimum: 6 characters</string>
     <string name="nickname">Nickname</string>
-    <string name="login_password">Password</string>
+    <string name="password">Password</string>
     <string name="join_now_1">Don\'t have an account?</string>
     <string name="join_now_2">Join Talks now!</string>
     <string name="talk_hint">Insert here your Talk message</string>
