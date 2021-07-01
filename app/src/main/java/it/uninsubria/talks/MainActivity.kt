@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
@@ -35,6 +36,7 @@ import java.io.IOException
  */
 
 class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
+    // Current activity TAG
     private val TAG = "Main_Activity"
 
     // Firebase
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     private lateinit var myUTRV: RecyclerView
     private lateinit var settingBtn: ImageButton
     private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var tilCercaProfilo: TextInputLayout
     private lateinit var tfCercaProfilo: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         myUTRV = findViewById(R.id.UserTalksRecyclerView)
         settingBtn = findViewById(R.id.IB_settingsButton)
         refreshLayout = findViewById(R.id.swipeRefreshLayout)
+        tilCercaProfilo = findViewById(R.id.TIL_cercaProfilo)
         tfCercaProfilo = findViewById(R.id.TF_cercaProfilo)
 
         myUTRV.layoutManager = LinearLayoutManager(this)
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         nightMode = sharedPreferences.getInt("NightModeIntStatus", MODE_NIGHT_NO)
         setDefaultNightMode(nightMode)
 
-        // PopUp menu
+        // Pop-up menu
         settingsPopup = PopupMenu(this, settingBtn)
         settingsPopup.menuInflater.inflate(R.menu.popup_settings, settingsPopup.menu)
         if((nightMode == MODE_NIGHT_NO)) {
@@ -104,7 +108,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         // Controllo se l'utente e' gia' registrato
         val currentUser = myAuth.currentUser
         if(currentUser == null) {
-            Log.i(TAG, "[MAIN] Passo alla schermata <Login>")
+            Log.i(TAG, "Switch to activity <Login>")
             startActivity(Intent(this, Login::class.java))
         } else {
             talksArrayList.clear()
@@ -138,7 +142,8 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     }
 
     override fun talkClick(position: Int) {
-        val intent = Intent(this, Profilo::class.java)
+        Log.i(TAG, "Switch to activity <UserProfile>")
+        val intent = Intent(this, UserProfile::class.java)
         intent.putExtra("NICKNAME", talksArrayList[position].nickname)
         startActivity(intent)
     }
@@ -153,6 +158,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
             when (item.itemId) {
                 R.id.nightModeButton -> switchUIMode()
                 R.id.changeAccountPicture -> uploadPicture()
+                R.id.removeAccountPicture -> removeAccountPicture()
                 R.id.logoutButton -> doLogout()
             }
             true
@@ -177,21 +183,33 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
     private fun doLogout() {
         myAuth.signOut()
         Toast.makeText(baseContext, R.string.logOut, Toast.LENGTH_SHORT).show()
+        Log.i(TAG, "Switch to activity <Login>")
         startActivity(Intent(this, Login::class.java))
     }
 
     fun findProfile(@Suppress("UNUSED_PARAMETER") v: View) {
-        val intent = Intent(this, ListaProfili::class.java)
-        intent.putExtra("NICKNAME", tfCercaProfilo.text.toString().trim())
-        startActivity(intent)
+        Log.i(TAG, "Switch to activity <ProfileList>")
+        val intent = Intent(this, ProfileList::class.java)
+
+        myDB.getSimilarProfile(tfCercaProfilo.text.toString().trim()) { profileArrayList ->
+            if(profileArrayList != null && profileArrayList.size > 0) {
+                tilCercaProfilo.error = null
+                intent.putExtra("PROFILE_LIST", profileArrayList)
+                startActivity(intent)
+            } else {
+                tilCercaProfilo.error = (tfCercaProfilo.text.toString().trim() + " " + getString(R.string.notFound))
+            }
+        }
     }
 
     fun newPost(@Suppress("UNUSED_PARAMETER") v: View) {
-        startActivity(Intent(this, CreaTalk::class.java))
+        Log.i(TAG, "Switch to activity <NewTalk>")
+        startActivity(Intent(this, NewTalk::class.java))
     }
 
     // Richiesta immagine dalla galleria
     private fun uploadPicture() {
+        Log.i(TAG, "Get picture from gallery")
         startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_REQUEST)
     }
 
@@ -209,23 +227,23 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             try {
-                                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(
-                                    this.contentResolver,
-                                    selectedImage
-                                )
+                                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
                                 // Compressione
                                 val baos = ByteArrayOutputStream()
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                                 val imgData = baos.toByteArray()
                                 // Upload
-                                myStorage.uploadBitmap(
-                                    "AccountIcon/${document.data["nickname"]}.jpg",
-                                    imgData
-                                ) { result ->
-                                    if (result) {
-                                        Toast.makeText( baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
+                                myStorage.uploadBitmap("AccountIcon/${document.data["nickname"]}.jpg", imgData) { storageResult ->
+                                    if (storageResult) {
+                                        myDB.setUserPictureStatus(myAuth.currentUser!!.email, true) { result ->
+                                            if(result) {
+                                                Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
+                                            } else {
+                                                Toast.makeText(baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
                                     } else {
-                                        Toast.makeText(baseContext, R.string.ImageUpdated, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(baseContext, R.string.ImageNotUpdated, Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             } catch (e: FileNotFoundException) {
@@ -235,9 +253,24 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
                             }
                         }
                     } else {
-                        Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+                        Log.e(TAG, task.exception.toString())
                     }
                 }
+            }
+        }
+    }
+
+    private fun removeAccountPicture() {
+        myDB.getNicknameByEmail(myAuth.currentUser!!.email) { result ->
+            if(result != "") {
+                myStorage.deleteBitmap("AccountIcon/$result.jpg")
+            }
+        }
+        myDB.setUserPictureStatus(myAuth.currentUser!!.email, false) { result ->
+            if(result) {
+                Toast.makeText(baseContext, R.string.ImageRemoved, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(baseContext, R.string.ImageNotRemoved, Toast.LENGTH_SHORT).show()
             }
         }
     }
