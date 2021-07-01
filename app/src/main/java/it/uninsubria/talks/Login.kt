@@ -13,6 +13,8 @@ import it.uninsubria.firebase.Authentication
 class Login : AppCompatActivity() {
     // Current activity TAG
     private val TAG = "Activity_Login"
+
+    // Firebase
     private var myAuth: Authentication = Authentication()
 
     // raw view declaration
@@ -73,6 +75,6 @@ class Login : AppCompatActivity() {
 
     fun registraNuovoCliente(@Suppress("UNUSED_PARAMETER") v: View) {
         Log.i(TAG, "[LOGIN] Passo alla schermata <Registrazione>")
-        startActivity(Intent(this, Registrazione::class.java))
+        startActivity(Intent(this, Registration::class.java))
     }
 }

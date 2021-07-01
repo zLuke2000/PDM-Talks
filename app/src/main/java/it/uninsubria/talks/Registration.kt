@@ -11,11 +11,13 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import it.uninsubria.firebase.Database
 
-class Registrazione : AppCompatActivity() {
+class Registration : AppCompatActivity() {
+    // Current activity TAG
     private val TAG = "Activity_Registrazione"
 
-    private val myDB: Database = Database()
+    // Firebase
     private lateinit var myAuth: FirebaseAuth
+    private val myDB: Database = Database()
 
     // raw view declaration
     private lateinit var tfRealName: TextInputEditText
@@ -31,7 +33,7 @@ class Registrazione : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registrazione)
+        setContentView(R.layout.activity_registration)
 
         // raw view link
         tfRealName = findViewById(R.id.TF_RealNameReg)

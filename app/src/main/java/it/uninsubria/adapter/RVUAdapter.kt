@@ -1,5 +1,6 @@
 package it.uninsubria.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,14 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.uninsubria.firebase.Storage
 import it.uninsubria.talks.R
-import it.uninsubria.models.User
+import it.uninsubria.models.Profile
 
 /*
  *  RVUAdapter -> RecyclerView User Adapter
  *  TRHolder   -> Talk Row Holder
  */
 
-class RVUAdapter(private val usersList: ArrayList<User>, private val listener: OnTalkClickListener?) : RecyclerView.Adapter<RVUAdapter.TRHolder>() {
+class RVUAdapter(private val usersList: ArrayList<Profile>, private val listener: OnTalkClickListener?) : RecyclerView.Adapter<RVUAdapter.TRHolder>() {
+    // Current class TAG
     private val TAG = "RVTAdapter"
 
     private val myStorage: Storage = Storage()
@@ -26,19 +28,23 @@ class RVUAdapter(private val usersList: ArrayList<User>, private val listener: O
     }
 
     override fun onBindViewHolder(holder: TRHolder, position: Int) {
-        val currentUser: User = usersList[position]
+        val currentProfile: Profile = usersList[position]
 
-        // aggiorno nickname
-        holder.nickname.text = currentUser.nickname
-        // aggiorno nome e cognome
-        holder.content.text = (currentUser.surname + currentUser.name)
-        // aggiorno icona profilo
-        myStorage.downloadBitmap("AccountIcon/${currentUser.nickname}.jpg") { resultBitmap ->
-            if(resultBitmap != null) {
-                holder.accountIcon.setImageBitmap(resultBitmap)
-            } else {
-                holder.accountIcon.setImageResource(R.drawable.default_account_image)
+        // update nickname
+        holder.nickname.text = currentProfile.nickname
+        // update name and surname
+        holder.content.text = (currentProfile.surname + currentProfile.name)
+        // update profile picture
+        if(currentProfile.hasPicture == true) {
+            myStorage.downloadBitmap("AccountIcon/${currentProfile.nickname}.jpg") { resultBitmap ->
+                if (resultBitmap != null) {
+                    holder.accountIcon.setImageBitmap(resultBitmap)
+                } else {
+                    holder.accountIcon.setImageResource(R.drawable.default_account_image)
+                }
             }
+        } else {
+            holder.accountIcon.setImageResource(R.drawable.default_account_image)
         }
     }
 

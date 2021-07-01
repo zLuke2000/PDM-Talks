@@ -5,11 +5,15 @@ import android.graphics.BitmapFactory
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 
 class Storage {
+    // Current class TAG
+    private val TAG = "Storage"
 
+    // Firebase Storage reference
     private var myStorage: FirebaseStorage = Firebase.storage
 
     fun downloadBitmap(path: String, callback: (Bitmap?) -> Unit) {
@@ -20,7 +24,7 @@ class Storage {
             val filePath = localFile.path
             val bitmap = BitmapFactory.decodeFile(filePath)
             callback(bitmap)
-        }.addOnFailureListener{
+        }.addOnFailureListener {
             callback(null)
         }
     }

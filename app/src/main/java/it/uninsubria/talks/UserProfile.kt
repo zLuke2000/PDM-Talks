@@ -16,14 +16,17 @@ import com.google.firebase.ktx.Firebase
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
+import it.uninsubria.models.Profile
 import it.uninsubria.models.Talks
 
 /*
     SUTRV -> Single User Talks Recycler View
  */
-class Profilo : AppCompatActivity() {
-    private val TAG = "Activity_Profilo"
+class UserProfile : AppCompatActivity() {
+    // Current activity TAG
+    private val TAG = "Activity_UserProfile"
 
+    // Firebase
     private val myDB: Database = Database()
     private val myAuth: FirebaseAuth = Firebase.auth
     private val myStorage: Storage = Storage()
@@ -31,6 +34,7 @@ class Profilo : AppCompatActivity() {
     private lateinit var talksArrayList: ArrayList<Talks>
     private lateinit var rvtAdapter: RVTAdapter
     private lateinit var nickname: String
+    private var hasPicture: Boolean = false
 
     // raw view declaration
     private lateinit var tvNicknameProfilo: TextView
@@ -45,7 +49,7 @@ class Profilo : AppCompatActivity() {
         nickname = intent.getStringExtra("NICKNAME").toString()
 
         // Carica il layout
-        setContentView(R.layout.activity_profilo)
+        setContentView(R.layout.activity_profile)
 
         // raw view link
         tvNicknameProfilo = findViewById(R.id.TV_NicknameProfilo)
@@ -81,26 +85,29 @@ class Profilo : AppCompatActivity() {
 
     private fun getUserData() {
         // Imposta Nome e Cognome
-
         myDB.getUser(nickname) { task ->
             if (task.isSuccessful) {
                 for (document in task.result!!) {
-                    tvNomeProfilo.text = document.data["nome"].toString()
-                    tvCognomeProfilo.text = document.data["cognome"].toString()
+                    tvNomeProfilo.text = document.data["name"].toString()
+                    tvCognomeProfilo.text = document.data["surname"].toString()
+                    // Imposta immagine profilo
+                    if(document.data["hasPicture"] as Boolean) {
+                        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { resultBitmap ->
+                            if (resultBitmap != null) {
+                                ivProfileIcon.setImageBitmap(resultBitmap)
+                            } else {
+                                ivProfileIcon.setImageResource(R.drawable.default_account_image)
+                            }
+                        }
+                    }else {
+                        ivProfileIcon.setImageResource(R.drawable.default_account_image)
+                    }
                 }
             } else {
                 Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
             }
         }
 
-        // Imposta immagine profilo
-        myStorage.downloadBitmap("AccountIcon/$nickname.jpg") { resultBitmap ->
-            if (resultBitmap != null) {
-                ivProfileIcon.setImageBitmap(resultBitmap)
-            } else {
-                ivProfileIcon.setImageResource(R.drawable.default_account_image)
-            }
-        }
     }
 
     private fun eventChangeListener() {

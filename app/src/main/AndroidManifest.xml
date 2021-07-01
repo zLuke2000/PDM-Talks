@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Talks">
-        <activity android:name=".Registrazione"/>
-        <activity android:name=".CreaTalk" />
-        <activity android:name=".Profilo" />
+        <activity android:name=".Registration"/>
+        <activity android:name=".NewTalk" />
+        <activity android:name=".UserProfile" />
         <activity android:name=".Login" />
-        <activity android:name=".ListaProfili" />
+        <activity android:name=".ProfileList" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

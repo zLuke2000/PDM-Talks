@@ -15,7 +15,8 @@ import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
 import it.uninsubria.talks.R
 import it.uninsubria.models.Talks
-
+import java.io.IOException
+import java.lang.Exception
 
 /*
     RVTAdapter -> RecyclerView Talks Adapter
@@ -23,6 +24,7 @@ import it.uninsubria.models.Talks
  */
 
 class RVTAdapter(private val parentContext: Context, private val talksList: ArrayList<Talks>, private val listener: OnTalkClickListener?, private val parentWidth: Int, private val userEmail: String?) : RecyclerView.Adapter<RVTAdapter.TRHolder>() {
+    // Current class TAG
     private val TAG = "RVTAdapter"
 
     private val myStorage: Storage = Storage()
@@ -36,38 +38,47 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
     override fun onBindViewHolder(holder: TRHolder, position: Int) {
         val currentTalk: Talks = talksList[position]
 
-        // aggiorno nickname
+        // update nickname
         holder.nickname.text = currentTalk.nickname
-        // aggiorno contenuto Talk
+        // update Talk content
         holder.content.text = currentTalk.content
-        // aggiorno e rendo visibile link fonte (se esistente)
+        // update and show source link (if exist)
         holder.linkSource.text = currentTalk.linkSource
         if (holder.linkSource.text.isNullOrEmpty()) {
             holder.linkSource.textSize = 0F
         } else {
             holder.linkSource.textSize = 14F
         }
-        // aggiorno icona profilo
-        myStorage.downloadBitmap("AccountIcon/${currentTalk.nickname}.jpg") { resultBitmap ->
-            if(resultBitmap != null) {
-                holder.accountIcon.setImageBitmap(resultBitmap)
+
+        // update profile picture
+        myDB.getUserPictureStatus(currentTalk.nickname) { result ->
+            if (result) {
+                myStorage.downloadBitmap("AccountIcon/${currentTalk.nickname}.jpg") { resultBitmap ->
+                    if (resultBitmap != null) {
+                        holder.accountIcon.setImageBitmap(resultBitmap)
+                    } else {
+                        holder.accountIcon.setImageResource(R.drawable.default_account_image)
+                    }
+                }
             } else {
                 holder.accountIcon.setImageResource(R.drawable.default_account_image)
             }
         }
 
-        // aggiorno immagine Talk (se esistente)
-        myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { resultBitmap ->
-            if(resultBitmap != null) {
-                val factor = parentWidth / resultBitmap.width.toFloat()
-                val finalBitmap = Bitmap.createScaledBitmap(resultBitmap, parentWidth, (resultBitmap.height * factor).toInt(), true)
-                holder.talkImage.setImageBitmap(finalBitmap)
-            } else {
-                holder.talkImage.setImageDrawable(null)
+        // update Talk image (if exist)
+        if(currentTalk.hasImage == true) {
+            myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { resultBitmap ->
+                if (resultBitmap != null) {
+                    val factor = parentWidth / resultBitmap.width.toFloat()
+                    val finalBitmap = Bitmap.createScaledBitmap(resultBitmap, parentWidth, (resultBitmap.height * factor).toInt(), true)
+                    holder.talkImage.setImageBitmap(finalBitmap)
+                } else {
+                    holder.talkImage.setImageDrawable(null)
+                }
             }
         }
 
-        // abilita icona rimuovi talk (se l'utente corrente e' il proprietario)
+        // enable talk remove icon (if the current user is the owner)
         myDB.getNicknameByEmail(userEmail) { result ->
             if (currentTalk.nickname.equals(result)) {
                 holder.deleteTalkImage.isVisible = true
@@ -104,9 +115,7 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
     }
 
     interface OnTalkClickListener {
-        fun talkClick(position: Int) {
-        }
-
+        fun talkClick(position: Int) {}
     }
 
     private fun deleteCurrentTalk(uid: String) {

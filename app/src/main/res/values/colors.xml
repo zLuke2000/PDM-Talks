@@ -8,7 +8,7 @@
     <color name="orange_light">#FFFFBB33</color>
     <color name="orange_dark">#FFFF8800</color>
     <color name="default_link">#FF1A0DAB</color>
-    <color name="yellow_textarea">#674E1B</color>
     <color name="default_primary_text">#FF000000</color>
     <color name="default_secondary_text">#808080</color>
+    <color name="red600">#E53935</color>
 </resources>
