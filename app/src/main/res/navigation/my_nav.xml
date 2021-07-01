@@ -46,18 +46,18 @@
     </fragment>
     <activity
         android:id="@+id/profilo"
-        android:name="it.uninsubria.talks.Profilo"
+        android:name="it.uninsubria.talks.UserProfile"
         android:label="activity_profilo"
-        tools:layout="@layout/activity_profilo" >
+        tools:layout="@layout/activity_profile" >
         <action
             android:id="@+id/action_profilo_to_mainActivity"
             app:destination="@id/mainActivity" />
     </activity>
     <activity
         android:id="@+id/registrazione"
-        android:name="it.uninsubria.talks.Registrazione"
+        android:name="it.uninsubria.talks.Registration"
         android:label="activity_registrazione"
-        tools:layout="@layout/activity_registrazione" >
+        tools:layout="@layout/activity_registration" >
         <action
             android:id="@+id/action_registrazione_to_mainActivity"
             app:destination="@id/mainActivity" />

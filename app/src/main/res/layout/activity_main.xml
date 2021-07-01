@@ -49,13 +49,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="findProfile"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/TIL_cercaProfilo"
                 app:layout_constraintEnd_toStartOf="@+id/IB_settingsButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/TIL_cercaProfilo"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/TIL_cercaProfilo"
                 app:srcCompat="@android:drawable/ic_menu_search"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/IB_settingsButton"
@@ -69,11 +69,11 @@
                 android:rotationY="180"
                 android:src="@android:drawable/ic_menu_sort_by_size"
                 android:verticalScrollbarPosition="defaultPosition"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/IV_findProfile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/IV_findProfile"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/IV_findProfile"
                 app:tint="@color/orange_light"
                 tools:ignore="ContentDescription" />
 

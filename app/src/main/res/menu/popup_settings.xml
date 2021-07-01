@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nightModeButton"
         android:title="@string/switchToNight" />
     <item
         android:id="@+id/changeAccountPicture"
         android:title="@string/changePicture" />
+    <item
+        android:id="@+id/removeAccountPicture"
+        android:title="@string/removeAccountPicture" />
     <item
         android:id="@+id/logoutButton"
         android:title="@string/logOut" />

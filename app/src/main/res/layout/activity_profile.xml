@@ -6,7 +6,7 @@
     android:id="@+id/swipeRefreshLayoutProfilo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profilo">
+    tools:context=".UserProfile">
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/constraintLayout"

@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".Registrazione">
+    tools:context=".Registration">
 
     <!-- TEXT VIEW TALKS-->
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/TV_signUpReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/TV_signUpReg">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_RealNameReg"
@@ -84,9 +84,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_EmailReg"
-            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,19 +99,19 @@
         android:hint="@string/password"
         app:endIconMode="password_toggle"
         app:errorEnabled="true"
+        app:helperText="@string/password_requirement"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/TIL_NicknameReg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TIL_EmailReg"
-        app:helperTextEnabled="true"
-        app:helperText="@string/password_requirement">
+        app:layout_constraintTop_toBottomOf="@+id/TIL_EmailReg">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_PasswordReg"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,9 +131,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TF_NicknameReg"
-            android:inputType="textShortMessage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textShortMessage" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
