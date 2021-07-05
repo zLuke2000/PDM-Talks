@@ -8,14 +8,16 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputLayout
-import it.uninsubria.firebase.Authentication
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class Login : AppCompatActivity() {
     // Current activity TAG
     private val TAG = "Activity_Login"
 
-    // Firebase
-    private var myAuth: Authentication = Authentication()
+    // Firebase Authentication reference
+    private val auth: FirebaseAuth = Firebase.auth
 
     // raw view declaration
     private lateinit var tfPassword: TextView
@@ -25,8 +27,8 @@ class Login : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Carico il layout
         setContentView(R.layout.activity_login)
-
         // raw view link
         tfPassword = findViewById(R.id.TF_PasswordLogin)
         tilPassword = findViewById(R.id.TIL_PasswordLogin)
@@ -34,13 +36,13 @@ class Login : AppCompatActivity() {
         tilEmail = findViewById(R.id.TIL_EmailLogin)
     }
 
-    fun loginUtente(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun loginUser(@Suppress("UNUSED_PARAMETER") v: View) {
         val password: String = tfPassword.text.toString().trim()
         val email: String = tfEmail.text.toString().trim()
 
         if (checkEmail(email) and checkPassword(password, 6)) {
-            myAuth.signInWithEmailAndPassword(this, email, password) { result ->
-                if(result) {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if(task.isSuccessful) {
                     Toast.makeText(baseContext, R.string.loginOK, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                 } else {
@@ -63,7 +65,6 @@ class Login : AppCompatActivity() {
 
     // controllo password
     private fun checkPassword(pass: String, min: Int): Boolean {
-        Log.i(TAG, pass);
         return if (pass.length < min) {
             tilPassword.error = getString(R.string.minChar).replace("$", "" + min)
             false
@@ -73,7 +74,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    fun registraNuovoCliente(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun newUserRegistration(@Suppress("UNUSED_PARAMETER") v: View) {
         Log.i(TAG, "[LOGIN] Passo alla schermata <Registrazione>")
         startActivity(Intent(this, Registration::class.java))
     }

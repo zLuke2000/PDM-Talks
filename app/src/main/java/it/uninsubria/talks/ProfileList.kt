@@ -21,7 +21,6 @@ class ProfileList : AppCompatActivity(), RVUAdapter.OnTalkClickListener {
     // Firebase
     private val myDB: Database = Database()
 
-    private lateinit var userToFind: String
     // Lista e adapter necessari per inizializzare la RecyclerView
     private lateinit var usersArrayList: ArrayList<Profile>
     private lateinit var rvuAdapter: RVUAdapter

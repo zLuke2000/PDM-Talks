@@ -6,24 +6,27 @@ import android.os.Parcelable
 class Profile (var nickname: String? = null,
                var name: String? = null,
                var surname: String? = null,
-               var hasPicture: Boolean? = null) : Parcelable {
+               var hasPicture: Boolean? = null,
+               var email: String? = null) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readValue(Boolean::class.java.classLoader) as? Boolean) {
-    }
-
-    override fun describeContents(): Int {
-        TODO("Not yet implemented")
-    }
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+        parcel.readString()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(nickname)
         parcel.writeString(name)
         parcel.writeString(surname)
         parcel.writeValue(hasPicture)
+        parcel.writeString(email)
+    }
+
+    override fun describeContents(): Int {
+        return 0
     }
 
     companion object CREATOR : Parcelable.Creator<Profile> {

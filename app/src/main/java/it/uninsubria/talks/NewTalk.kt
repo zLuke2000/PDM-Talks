@@ -22,6 +22,7 @@ import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
 import java.io.ByteArrayOutputStream
 
+
 class NewTalk : AppCompatActivity() {
     // Current activity TAG
     private val TAG = "Activity_NewTalk"
@@ -74,10 +75,11 @@ class NewTalk : AppCompatActivity() {
                             Toast.makeText(baseContext, R.string.talkSent, Toast.LENGTH_SHORT).show()
                             etTalkText.text = ""
                             etLinkSource.text = ""
-                            if(hasImage) {
+                            if (hasImage) {
                                 Log.e(TAG, "CARICO L'IMMAGINE ")
                                 uploadPicture(uid)
                             }
+                            removeImage(bRemoveImage)
                         }
                     }
                 }
@@ -87,7 +89,7 @@ class NewTalk : AppCompatActivity() {
     }
 
     fun getPicture(@Suppress("UNUSED_PARAMETER") v: View) {
-            startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_REQUEST)
     }
 
     fun removeImage(@Suppress("UNUSED_PARAMETER") v: View) {
@@ -102,14 +104,22 @@ class NewTalk : AppCompatActivity() {
         //Detects request codes
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
             val selectedImage: Uri? = data?.data
-            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
+            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(
+                this.contentResolver,
+                selectedImage
+            )
             // Compressione
             val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             imgData = baos.toByteArray()
 
             val factor = Resources.getSystem().displayMetrics.widthPixels / 1.5F / bitmap.width.toFloat()
-            val finalBitmap = Bitmap.createScaledBitmap(bitmap, (Resources.getSystem().displayMetrics.widthPixels/1.5F).toInt(), (bitmap.height * factor).toInt(), true)
+            val finalBitmap = Bitmap.createScaledBitmap(
+                bitmap,
+                (Resources.getSystem().displayMetrics.widthPixels / 1.5F).toInt(),
+                (bitmap.height * factor).toInt(),
+                true
+            )
             ivSelectedImage.setImageBitmap(finalBitmap)
             hasImage = true
             bRemoveImage.isVisible = true

@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import it.uninsubria.models.Profile
+import it.uninsubria.models.Talks
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -15,14 +16,7 @@ class Database {
     // Firebase Firestore reference
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    fun addUserToDB (name: String, surname: String, email: String, nickname: String) {
-        val currentUser: MutableMap<String, Any> = HashMap()
-        currentUser["name"] = name
-        currentUser["surname"] = surname
-        currentUser["email"] = email
-        currentUser["nickname"] = nickname
-        currentUser["hasPicture"] = false
-
+    fun addUserToDB (currentUser: Profile) {
         db.collection("profile")
             .add(currentUser)
             .addOnSuccessListener { docRef -> Log.i(TAG, "User added with ID: " + docRef.id) }
@@ -72,7 +66,7 @@ class Database {
         callback("")
     }
 
-    fun getTalks(callback: (QuerySnapshot?) -> Unit) {
+    fun getTalksList(callback: (QuerySnapshot?) -> Unit) {
         db.collection("talks")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener { value, error ->
@@ -114,11 +108,19 @@ class Database {
                 }
     }
 
-    fun checkUniqueUser(nickname: String, callback: (Task<QuerySnapshot>) -> Unit) {
+    fun checkUniqueUser(nickname: String, callback: (Boolean) -> Unit) {
         db.collection("profile")
                 .whereEqualTo("nickname", nickname)
                 .get()
-                .addOnCompleteListener { task -> callback(task) }
+                .addOnCompleteListener { task ->
+                    if(task.result?.isEmpty == true) {
+                        // nickname OK (unico)
+                        callback(true)
+                    } else {
+                        // Nickname gia' esistente (duplicato)
+                        callback(false)
+                    }
+                }
     }
 
     fun deleteTalks(talksUid: String, callback: (Boolean) -> Unit) {

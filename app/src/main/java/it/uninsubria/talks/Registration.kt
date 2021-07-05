@@ -10,6 +10,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import it.uninsubria.firebase.Database
+import it.uninsubria.models.Profile
+import java.util.*
 
 class Registration : AppCompatActivity() {
     // Current activity TAG
@@ -25,7 +27,7 @@ class Registration : AppCompatActivity() {
     private lateinit var tfEmail: TextInputEditText
     private lateinit var tfpassword: TextInputEditText
     private lateinit var tfNickname: TextInputEditText
-    private lateinit var tilRealname: TextInputLayout
+    private lateinit var tilRealName: TextInputLayout
     private lateinit var tilRealSurname: TextInputLayout
     private lateinit var tilEmail: TextInputLayout
     private lateinit var tilPassword: TextInputLayout
@@ -33,15 +35,15 @@ class Registration : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Carico il layout
         setContentView(R.layout.activity_registration)
-
         // raw view link
         tfRealName = findViewById(R.id.TF_RealNameReg)
         tfRealSurname = findViewById(R.id.TF_RealSurnameReg)
         tfEmail = findViewById(R.id.TF_EmailReg)
         tfpassword = findViewById(R.id.TF_PasswordReg)
         tfNickname = findViewById(R.id.TF_NicknameReg)
-        tilRealname = findViewById(R.id.TIL_RealNameReg)
+        tilRealName = findViewById(R.id.TIL_RealNameReg)
         tilRealSurname = findViewById(R.id.TIL_RealSurnameReg)
         tilEmail = findViewById(R.id.TIL_EmailReg)
         tilPassword = findViewById(R.id.TIL_PasswordReg)
@@ -54,41 +56,32 @@ class Registration : AppCompatActivity() {
     fun checkValueReg(@Suppress("UNUSED_PARAMETER") v: View) {
         val name: String = tfRealName.text.toString().trim()
         val surname: String = tfRealSurname.text.toString().trim()
-        val email: String = tfEmail.text.toString().trim()
+        val email: String = tfEmail.text.toString().trim().toLowerCase(Locale.getDefault())
         val password: String = tfpassword.text.toString().trim()
         val nickname: String = tfNickname.text.toString().trim()
-        var duplicato = false
 
-        if (checkName(tilRealname, name, 2, 16) and checkName(tilRealSurname, surname, 3, 16) and checkEmail(tilEmail, email) and checkPassword(tilPassword, password, 6) and checkName(tilNickname, nickname, 4, 30)) {
+        if (checkSimple(tilRealName, name, 2, 16) && checkSimple(tilRealSurname, surname, 3, 16) && checkEmail(tilEmail, email) && checkPassword(tilPassword, password, 6) && checkSimple(tilNickname, nickname, 4, 30)) {
             Log.i(TAG, "Controllo OK")
+
             //Controllo nickname unico
-            myDB.checkUniqueUser(nickname) { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result!!) {
-                        if(document.data["nickname"]?.equals(nickname)!!) {
-                            duplicato = true
+            myDB.checkUniqueUser(nickname) { result ->
+                if (result) {
+                    myAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { resultTask ->
+                            if (resultTask.isSuccessful) {
+                                // Sign in success
+                                Log.d(TAG, "createUserWithEmail:success")
+                                myDB.addUserToDB(Profile(nickname, name, surname, hasPicture = false, email))
+                                Toast.makeText(baseContext, R.string.SignInOK, Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this, MainActivity::class.java))
+                            } else {
+                                // If sign in fails
+                                Log.w(TAG,"createUserWithEmail:failure", resultTask.exception)
+                                Toast.makeText(baseContext, R.string.SignInKO, Toast.LENGTH_SHORT).show()
+                            }
                         }
-                    }
-                    if(!duplicato) {
-                        myAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(this) { resultTask ->
-                                    if (task.isSuccessful) {
-                                        // Sign in success
-                                        Log.d(TAG, "[REG] createUserWithEmail:success")
-                                        myDB.addUserToDB(name, surname, email, nickname)
-                                        Toast.makeText(baseContext, R.string.SignInOK, Toast.LENGTH_SHORT).show()
-                                        startActivity(Intent(this, MainActivity::class.java))
-                                    } else {
-                                        // If sign in fails
-                                        Log.w(TAG, "[REG] createUserWithEmail:failure", resultTask.exception)
-                                        Toast.makeText(baseContext, R.string.SignInKO, Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                    } else {
-                        Toast.makeText(baseContext, "" + getString(R.string.duplicateNickname).replace("$", nickname), Toast.LENGTH_SHORT).show()
-                    }
                 } else {
-                    Log.w(TAG, "[ERRORE] nella lettura degli utenti", task.exception)
+                    Toast.makeText(baseContext,"" + getString(R.string.duplicateNickname).replace("$", nickname), Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -97,16 +90,21 @@ class Registration : AppCompatActivity() {
     }
 
     // controllo lunghezza nome, cognome e nickname
-    private fun checkName(til: TextInputLayout, tfText: String, min: Int, max: Int): Boolean {
-        if (tfText.length < min) {
-            til.error = getString(R.string.minChar).replace("$", "" + min)
-            return false
-        } else if (tfText.length > max) {
-            til.error = getString(R.string.maxChar).replace("$", "" + min)
-            return false
+    private fun checkSimple(til: TextInputLayout, tfText: String, min: Int, max: Int): Boolean {
+        return when {
+            tfText.length < min -> {
+                til.error = getString(R.string.minChar).replace("$", "" + min)
+                false
+            }
+            tfText.length > max -> {
+                til.error = getString(R.string.maxChar).replace("$", "" + min)
+                false
+            }
+            else -> {
+                til.error = null
+                true
+            }
         }
-        til.error = null
-        return true
     }
 
     // controllo email

@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.ktx.Firebase
+import it.uninsubria.adapter.MyLinearLayoutManager
 import it.uninsubria.adapter.RVTAdapter
 import it.uninsubria.firebase.Database
 import it.uninsubria.firebase.Storage
@@ -66,13 +67,10 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Firebase - authentication
         myAuth = Firebase.auth
-
-        // Carica il layout
+        // Carico il layout
         setContentView(R.layout.activity_main)
-
         // raw view link
         myUTRV = findViewById(R.id.UserTalksRecyclerView)
         settingBtn = findViewById(R.id.IB_settingsButton)
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         tilCercaProfilo = findViewById(R.id.TIL_cercaProfilo)
         tfCercaProfilo = findViewById(R.id.TF_cercaProfilo)
 
-        myUTRV.layoutManager = LinearLayoutManager(this)
+        myUTRV.layoutManager = MyLinearLayoutManager(this)
         myUTRV.setHasFixedSize(true)
 
         talksArrayList = arrayListOf()
@@ -119,14 +117,14 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         refreshLayout.setOnRefreshListener {
             talksArrayList.clear()
             eventChangeListener()
-            refreshLayout.isRefreshing = false
         }
     }
 
     private fun eventChangeListener() {
         // Scarico Talks da firestore
+        Log.i(TAG, "DOWNLOAD")
         try {
-            myDB.getTalks { value ->
+            myDB.getTalksList { value ->
                 for (dc: DocumentChange in value?.documentChanges!!) {
                     if (dc.type == DocumentChange.Type.ADDED) {
                         val currentTalk = dc.document.toObject(Talks::class.java)
@@ -134,7 +132,9 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
                         talksArrayList.add(currentTalk)
                     }
                 }
+                refreshLayout.isRefreshing = false
                 rvtAdapter.notifyDataSetChanged()
+
             }
         } catch (e: IndexOutOfBoundsException) {
             Log.e(TAG, e.printStackTrace().toString())

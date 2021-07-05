@@ -47,10 +47,8 @@ class UserProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         nickname = intent.getStringExtra("NICKNAME").toString()
-
         // Carica il layout
         setContentView(R.layout.activity_profile)
-
         // raw view link
         tvNicknameProfilo = findViewById(R.id.TV_NicknameProfilo)
         mySUTRV = findViewById(R.id.SingleUserTalksRecyclerView)
@@ -58,7 +56,6 @@ class UserProfile : AppCompatActivity() {
         tvNomeProfilo = findViewById(R.id.TV_NomeProfilo)
         tvCognomeProfilo = findViewById(R.id.TV_CognomeProfilo)
         ivProfileIcon = findViewById(R.id.IV_ProfileIcon)
-
         // Imposta il nickanme
         tvNicknameProfilo.text = nickname
         // Compila gli altri campi (Nome, Cognome, Immagine profilo)
