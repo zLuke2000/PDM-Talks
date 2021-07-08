@@ -16,9 +16,9 @@
     <string name="log_in">ANMELDUNG</string>
     <string name="sign_in">ANMELDEN</string>
     <string name="sign_up">ANMELDEN</string>
-    <string name="new_post">Neues Gespr�ch</string>
+    <string name="new_post">Neues Gesprach</string>
     <string name="submit">EINREICHEN</string>
-    <string name="insert_image">BILD EINF�GEN</string>
+    <string name="insert_image">BILD EINFuGEN</string>
     <string name="remove_image">\ Nimage entfernen.</string>
     <string name="search_user_hint">Suchbenutzer</string>
 
@@ -34,18 +34,18 @@
     <string name="ImageRemoved">Kontobild wurde erfolgreich entfernt</string>
     <string name="ImageNotRemoved">Kontobild kann nicht entfernt werden</string>
     <string name="talkDeletedOK">Erfolgreich reden</string>
-    <string name="talkDeletedKO">Ausgew�hltes Gespr�ch kann nicht entfernt werden</string>
+    <string name="talkDeletedKO">Ausgewahltes Gesprach kann nicht entfernt werden</string>
 
     <!-- Stringhr Popup -->
     <string name="switchToNight">Wechseln Sie in den Nachtmodus</string>
     <string name="switchToLight">Wechseln Sie in den Lichtmodus</string>
-    <string name="changePicture">Anzeigebild �ndern</string>
+    <string name="changePicture">Anzeigebild andern</string>
     <string name="removeAccountPicture">Konto bild entfernen.</string>
     <string name="logOut">AUSLOGGEN</string>
 
     <!-- Stringhe Error -->
-    <string name="invalidEmail">Ung�ltige E-Mail</string>
-    <string name="talkTooShort">Warnung, das Gespr�ch muss mindestens $ Zeichen sein</string>
+    <string name="invalidEmail">Ungultige E-Mail</string>
+    <string name="talkTooShort">Warnung, das Gesprach muss mindestens $ Zeichen sein</string>
     <string name="talkTooLong">Warnung, das Talk-Limit ist $ Charaktere</string>
     <string name="minChar">Minimum: $ Zeichen</string>
     <string name="maxChar">Maximum: $ Zeichen</string>
