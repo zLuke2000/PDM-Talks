@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Talks</string>
+    <!-- APP NAME -->
+
+    <!-- Stringhe Layout -->
     <string name="real_name">Nombre</string>
     <string name="real_surname">Apellido</string>
-    <string name="password">contraseña</string>
-    <string name="email_address">dirección de correo electrónico</string>
+    <string name="email_address">Direcci�n de correo electr�nico</string>
+    <string name="password_requirement">M�nimo 6 caracteres</string>
     <string name="nickname">Apodo</string>
-    <string name="join_now">Únete a las conversaciones ahora!</string>
-    <string name="login">Acceso</string>
+    <string name="password">Contrase�a</string>
+    <string name="join_now_1">�Tienes una cuenta?</string>
+    <string name="join_now_2">��nete a las conversaciones ahora!</string>
+    <string name="talk_hint">Inserte aqu� su mensaje de conversaci�n</string>
+    <string name="link_hint">Inserte aqu� la fuente</string>
+    <string name="log_in">ACCESO</string>
+    <string name="sign_in">REGISTRARSE</string>
+    <string name="sign_up">INSCRIBIRSE</string>
+    <string name="new_post">Nueva charla</string>
+    <string name="submit">ENVIAR</string>
+    <string name="insert_image">INSERTAR IMAGEN</string>
+    <string name="remove_image">Eliminar \ nimage</string>
+    <string name="search_user_hint">usuario de b�squeda</string>
+
+
+    <!-- Stringhe Toast -->
+    <string name="talkSent">Hablar con �xito enviado</string>
+    <string name="loginOK">Acceso permitido</string>
+    <string name="loginKO">Acceso denegado</string>
+    <string name="SignInOK">Usuario registrado con �xito</string>
+    <string name="SignInKO">No se puede registrar al usuario</string>
+    <string name="ImageUpdated">Imagen de cuenta actualizada con �xito</string>
+    <string name="ImageNotUpdated">No se puede actualizar la imagen de la cuenta</string>
+    <string name="ImageRemoved">Imagen de cuenta eliminada con �xito</string>
+    <string name="ImageNotRemoved">No se puede eliminar la imagen de cuenta</string>
+    <string name="talkDeletedOK">Hablar con �xito eliminado</string>
+    <string name="talkDeletedKO">No se puede eliminar la conversaci�n seleccionada</string>
+
+    <!-- Stringhr Popup -->
+    <string name="switchToNight">Cambiar al modo nocturno</string>
+    <string name="switchToLight">Cambiar al modo de luz</string>
+    <string name="changePicture">Cambiar foto de cuenta</string>
+    <string name="removeAccountPicture">Eliminar la imagen de cuenta</string>
+    <string name="logOut">CERRAR SESI�N</string>
+
+    <!-- Stringhe Error -->
+    <string name="invalidEmail">Email inv�lido</string>
+    <string name="talkTooShort">Advertencia, la conversaci�n debe tener al menos $ caracteres.</string>
+    <string name="talkTooLong">Advertencia, el l�mite de conversaci�n es $ caracteres.</string>
+    <string name="minChar">m�nimo: $ caracteres</string>
+    <string name="maxChar">M�ximo: $ caracteres</string>
+    <string name="duplicateNickname">Apodo: $ ya registrado</string>
+    <string name="notFound">"extraviado"</string>
+
+    <!-- Stringhe -->
 </resources>

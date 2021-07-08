@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Talks</string>
+    <!-- APP NAME -->
+
+    <!-- Stringhe Layout -->
     <string name="real_name">Nom</string>
     <string name="real_surname">Nom de famille</string>
-    <string name="password">Mot de passe</string>
     <string name="email_address">Adresse e-mail</string>
+    <string name="password_requirement">Minimum: 6 caract�res</string>
     <string name="nickname">Surnom</string>
-    <string name="join_now">Rejoignez les discussions maintenant!</string>
-    <string name="login">Connexion</string>
+    <string name="password">Mot de passe</string>
+    <string name="join_now_1">Ne pas avoir un compte?</string>
+    <string name="join_now_2">Rejoignez les discussions maintenant!</string>
+    <string name="talk_hint">Ins�rez ici votre message de conversation</string>
+    <string name="link_hint">Ins�rer ici la source</string>
+    <string name="log_in">CONNEXION</string>
+    <string name="sign_in">SIDENTIFIER</string>
+    <string name="sign_up">SINSCRIRE</string>
+    <string name="new_post">Discours</string>
+    <string name="submit">NOUS FAIRE PARVENIR</string>
+    <string name="insert_image">INS�RER UNE IMAGE</string>
+    <string name="remove_image">Supprimer \ nimage</string>
+    <string name="search_user_hint">recherche utilisateur</string>
+
+
+    <!-- Stringhe Toast -->
+    <string name="talkSent">Parler avec succ�s envoy�</string>
+    <string name="loginOK">Acc�s autoris�</string>
+    <string name="loginKO">Acc�s refus�</string>
+    <string name="SignInOK">Utilisateur enregistr� avec succ�s</string>
+    <string name="SignInKO">Impossible denregistrer lutilisateur</string>
+    <string name="ImageUpdated">Image de compte mis � jour avec succ�s</string>
+    <string name="ImageNotUpdated">Impossible de mettre � jour la photo du compte</string>
+    <string name="ImageRemoved">Image de compte supprim� avec succ�s</string>
+    <string name="ImageNotRemoved">Impossible de supprimer limage du compte</string>
+    <string name="talkDeletedOK">Parler avec succ�s enlev�</string>
+    <string name="talkDeletedKO">Impossible de supprimer la conversation s�lectionn�e</string>
+
+    <!-- Stringhr Popup -->
+    <string name="switchToNight">Basculer en mode nuit</string>
+    <string name="switchToLight">Passer en mode lumi�re</string>
+    <string name="changePicture">Changer Photo de compte</string>
+    <string name="removeAccountPicture">Supprimer limage du compte</string>
+    <string name="logOut">SE D�CONNECTER</string>
+
+    <!-- Stringhe Error -->
+    <string name="invalidEmail">Email invalide</string>
+    <string name="talkTooShort">AVERTISSEMENT, le discours doit �tre dau moins $ de caract�res</string>
+    <string name="talkTooLong">AVERTISSEMENT, la limite de conversation est des caract�res $</string>
+    <string name="minChar">Minimum: $ de caract�res</string>
+    <string name="maxChar">Maximum: $ de caract�res</string>
+    <string name="duplicateNickname">Surnom: $ d�j� enregistr�</string>
+    <string name="notFound">"pas trouv�"</string>
+
+    <!-- Stringhe -->
 </resources>

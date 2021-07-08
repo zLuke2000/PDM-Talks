@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Talks</string>
+    <!-- Stringhe Layout -->
     <string name="real_name">Nome</string>
     <string name="real_surname">Cognome</string>
-    <string name="password">password</string>
     <string name="email_address">Indirizzo e-mail</string>
-    <string name="nickname">Soprannome</string>
-    <string name="join_now">Iscriviti a parlare ora!</string>
-    <string name="login">Login</string>
+    <string name="password_requirement">minimo: 6 caratteri</string>
+    <string name="nickname">Nickname</string>
+    <string name="password">Password</string>
+    <string name="join_now_1">Non hai un account?</string>
+    <string name="join_now_2">Iscriviti a Talks ora!</string>
+    <string name="talk_hint">Inserisci qui il tuo messaggio</string>
+    <string name="link_hint">Inserisci qui il link della fonte</string>
+    <string name="log_in">ACCEDERE</string>
+    <string name="sign_in">REGISTRATI</string>
+    <string name="sign_up">ISCRIVITI</string>
+    <string name="new_post">NUOVO TALK</string>
+    <string name="submit">INVIA</string>
+    <string name="insert_image">INSERISCI IMMAGINE</string>
+    <string name="remove_image">RIMUOVI IMMAGINE</string>
+    <string name="search_user_hint">ricerca utente</string>
+
+    <!-- Stringhe Toast -->
+    <string name="talkSent">talks inviato con successo</string>
+    <string name="loginOK">Accesso effettuato</string>
+    <string name="loginKO">Accesso negato</string>
+    <string name="SignInOK">Utente registrato con successo</string>
+    <string name="SignInKO">Impossibile registrare l\'utente</string>
+    <string name="ImageUpdated">Immagine dell\'account aggiornata con successo</string>
+    <string name="ImageNotUpdated">Impossibile aggiornare l\'immagine dell\'account</string>
+    <string name="ImageRemoved">Immagine dell\'account rimossa correttamente</string>
+    <string name="ImageNotRemoved">Impossibile rimuovere l\'immagine dell\'account</string>
+    <string name="talkDeletedOK">Talk rimosso con successo</string>
+    <string name="talkDeletedKO">Impossibile rimuovere il Talk selezionato</string>
+
+    <!-- Stringhe Popup -->
+    <string name="switchToNight">Passa alla modalità notte</string>
+    <string name="switchToLight">Passa alla modalità giorno</string>
+    <string name="changePicture">Cambia immagine account</string>
+    <string name="removeAccountPicture">Rimuovi immagine account</string>
+    <string name="logOut">ESCI</string>
+
+    <!-- Stringhe Error -->
+    <string name="invalidEmail">E-mail non valida</string>
+    <string name="talkTooShort">Avvertenza, il talk deve essere almeno $ caratteri</string>
+    <string name="talkTooLong">Avvertenza, il talk deve essere massimo $ caratteri</string>
+    <string name="minChar">Minimo: $ caratteri</string>
+    <string name="maxChar">Massimo: $ caratteri</string>
+    <string name="duplicateNickname">Nickname: $ già registrato</string>
+    <string name="notFound">"non trovato"</string>
 </resources>

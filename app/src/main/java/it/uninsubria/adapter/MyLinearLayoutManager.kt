@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView.Recycler
 
 class MyLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
 
+    private val TAG = "LinearLayoutManager"
+
     override fun supportsPredictiveItemAnimations(): Boolean {
         return false
     }
@@ -17,7 +19,7 @@ class MyLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            Log.e("TAG", "meet a IOOBE in RecyclerView")
+            Log.e(TAG, "riscontrata inconguenza nella recycler view")
         }
     }
 }

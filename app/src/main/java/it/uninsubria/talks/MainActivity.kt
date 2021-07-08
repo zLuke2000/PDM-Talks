@@ -14,7 +14,6 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.textfield.TextInputEditText
@@ -48,6 +47,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
 
     // Lista e adapter necessari per inizializzare la RecyclerView
     private lateinit var talksArrayList: ArrayList<Talks>
+    private var oldTALSize: Int = 0
     private lateinit var rvtAdapter: RVTAdapter
 
     // Variabili condivise (necessarie per mantenere la modalità notturna in caso di riavvio dell'app)
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
         myUTRV.layoutManager = MyLinearLayoutManager(this)
         myUTRV.setHasFixedSize(true)
 
-        talksArrayList = arrayListOf()
+        volatile@ talksArrayList = arrayListOf()
         rvtAdapter = RVTAdapter(baseContext, talksArrayList, this, Resources.getSystem().displayMetrics.widthPixels, "")
         myUTRV.adapter = rvtAdapter
 
@@ -109,20 +109,18 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
             Log.i(TAG, "Switch to activity <Login>")
             startActivity(Intent(this, Login::class.java))
         } else {
-            talksArrayList.clear()
             eventChangeListener()
         }
 
         // Imposto listener per swipeRefreshLayout
         refreshLayout.setOnRefreshListener {
-            talksArrayList.clear()
             eventChangeListener()
         }
     }
 
     private fun eventChangeListener() {
         // Scarico Talks da firestore
-        Log.i(TAG, "DOWNLOAD")
+        talksArrayList.clear()
         try {
             myDB.getTalksList { value ->
                 for (dc: DocumentChange in value?.documentChanges!!) {
@@ -134,7 +132,6 @@ class MainActivity : AppCompatActivity(), RVTAdapter.OnTalkClickListener {
                 }
                 refreshLayout.isRefreshing = false
                 rvtAdapter.notifyDataSetChanged()
-
             }
         } catch (e: IndexOutOfBoundsException) {
             Log.e(TAG, e.printStackTrace().toString())

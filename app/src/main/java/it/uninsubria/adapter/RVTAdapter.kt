@@ -67,7 +67,7 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
 
         // update Talk image (if exist)
         if(currentTalk.hasImage == true) {
-            Log.e(TAG, "Imposto l'immagine per: ${currentTalk.nickname}" + "  - " + "${currentTalk.content}")
+            Log.e(TAG, "Imposto l'immagine per: ${currentTalk.nickname}" + " - " + "${currentTalk.content}")
             myStorage.downloadBitmap("TalksImage/${currentTalk.imagePath}.jpg") { resultBitmap ->
                 if (resultBitmap != null) {
                     val factor = parentWidth / resultBitmap.width.toFloat()
