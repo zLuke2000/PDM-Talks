@@ -31,7 +31,6 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="@string/immagine_schermata_profilo"
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
 

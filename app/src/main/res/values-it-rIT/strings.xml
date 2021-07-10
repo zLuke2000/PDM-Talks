@@ -19,9 +19,10 @@
     <string name="insert_image">INSERISCI IMMAGINE</string>
     <string name="remove_image">RIMUOVI IMMAGINE</string>
     <string name="search_user_hint">ricerca utente</string>
+    <string name="profile_list_title">LISTA PROFILI</string>
 
     <!-- Stringhe Toast -->
-    <string name="talkSent">talks inviato con successo</string>
+    <string name="talkSent">Talks inviato con successo</string>
     <string name="loginOK">Accesso effettuato</string>
     <string name="loginKO">Accesso negato</string>
     <string name="SignInOK">Utente registrato con successo</string>

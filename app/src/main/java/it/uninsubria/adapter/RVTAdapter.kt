@@ -77,6 +77,8 @@ class RVTAdapter(private val parentContext: Context, private val talksList: Arra
                     holder.talkImage.setImageDrawable(null)
                 }
             }
+        } else {
+            holder.talkImage.setImageDrawable(null)
         }
 
         // enable talk remove icon (if the current user is the owner)

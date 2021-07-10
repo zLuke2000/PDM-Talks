@@ -19,12 +19,12 @@
     <string name="sign_up">SIGN-UP</string>
     <string name="new_post">NEW TALK</string>
     <string name="submit">SUBMIT</string>
-    <string name="template_nickname" translatable="false">template-nickname</string> <!-- Usato solo in row-talk come template per la creazione dell'interfaccia grafica -->
-    <string name="template_content" translatable="false">template-content</string>   <!-- Usato solo in row-talk come template per la creazione dell'interfaccia grafica -->
     <string name="insert_image">INSERT\nIMAGE</string>
     <string name="remove_image">REMOVE\nIMAGE</string>
     <string name="search_user_hint">search user</string>
-
+    <string name="profile_list_title">PROFILE LIST</string>
+    <string name="template_nickname" translatable="false">template-nickname</string> <!-- Usato solo in row-talk come template per la creazione dell'interfaccia grafica -->
+    <string name="template_content" translatable="false">template-content</string>   <!-- Usato solo in row-talk come template per la creazione dell'interfaccia grafica -->
 
     <!-- Stringhe Toast -->
     <string name="talkSent">Talk successfully sent</string>
@@ -54,11 +54,4 @@
     <string name="maxChar">maximum: $ characters</string>
     <string name="duplicateNickname">nickname: $ already registered</string>
     <string name="notFound">"not found"</string>
-
-    <!-- Stringhe -->
-    <string name="immagine_schermata_login" translatable="false">login_image</string>
-    <string name="immagine_schermata_profilo" translatable="false">profile_image</string>
-    <string name="button" translatable="false">Button</string>
-    <string name="textview" translatable="false">TextView</string>
-    <string name="profile_list_title" translatable="false">PROFILE LIST</string>
 </resources>

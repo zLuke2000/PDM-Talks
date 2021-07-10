@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- APP NAME -->
-
     <!-- Stringhe Layout -->
     <string name="real_name">Name</string>
     <string name="real_surname">Nachname</string>
@@ -21,7 +19,6 @@
     <string name="insert_image">BILD EINFuGEN</string>
     <string name="remove_image">\ Nimage entfernen.</string>
     <string name="search_user_hint">Suchbenutzer</string>
-
 
     <!-- Stringhe Toast -->
     <string name="talkSent">Sprechen Sie erfolgreich gesendet</string>
@@ -51,6 +48,5 @@
     <string name="maxChar">Maximum: $ Zeichen</string>
     <string name="duplicateNickname">Spitzname: $ registriert</string>
     <string name="notFound">"nicht gefunden"</string>
-
-    <!-- Stringhe -->
+    <string name="profile_list_title">PROFILLISTE</string>
 </resources>
