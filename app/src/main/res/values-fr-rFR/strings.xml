@@ -16,8 +16,8 @@
     <string name="sign_up">SINSCRIRE</string>
     <string name="new_post">Discours</string>
     <string name="submit">NOUS FAIRE PARVENIR</string>
-    <string name="insert_image">INSERER UNE IMAGE</string>
-    <string name="remove_image">Supprimer \ nimage</string>
+    <string name="insert_image">INSÉRER\nIMAGE</string>
+    <string name="remove_image">SUPPRIMER\nL\'IMAGE</string>
     <string name="search_user_hint">recherche utilisateur</string>
 
     <!-- Stringhe Toast -->

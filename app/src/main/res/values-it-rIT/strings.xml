@@ -16,8 +16,8 @@
     <string name="sign_up">ISCRIVITI</string>
     <string name="new_post">NUOVO TALK</string>
     <string name="submit">INVIA</string>
-    <string name="insert_image">INSERISCI IMMAGINE</string>
-    <string name="remove_image">RIMUOVI IMMAGINE</string>
+    <string name="insert_image">INSERISCI\nIMMAGINE</string>
+    <string name="remove_image">RIMUOVI\nIMMAGINE</string>
     <string name="search_user_hint">ricerca utente</string>
     <string name="profile_list_title">LISTA PROFILI</string>
 
